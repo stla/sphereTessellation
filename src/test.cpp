@@ -22,14 +22,16 @@ int test() {
     std::cout << dtos.number_of_faces() << " solid faces" << std::endl;
     std::cout << dtos.number_of_ghost_faces() << " ghost faces" << std::endl;
   }
-  CGAL::IO::write_OFF("result.off", dtos, CGAL::parameters::stream_precision(17));
+  CGAL::IO::write_OFF("inst/result.off", dtos, CGAL::parameters::stream_precision(17));
 
   DToS2::Vertex_handles vhs = dtos.vertex_handles();
   for(auto v = vhs.begin(); v != vhs.end(); v++) {
     DToS2::Edge_circulator ec = dtos.incident_edges(*v);
-    Container container(ec);
+    CC_Edges cc_edges(ec);
     std::cout << "\n--------------\n" << std::endl;
-    for(auto e = container.begin(); e != container.end(); e++) {
+    std::cout << "current vertex: " << (*v)->point() << std::endl;
+    std::cout << "\n--------------\n" << std::endl;
+    for(auto e = cc_edges.begin(); e != cc_edges.end(); e++) {
       std::cout << "\nface de e:\n" << std::endl;
       std::cout << e->first->vertex(0)->point() << std::endl;
       std::cout << e->first->vertex(1)->point() << std::endl;
