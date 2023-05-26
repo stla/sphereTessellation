@@ -32,6 +32,10 @@ int test() {
     std::cout << "current vertex: " << (*v)->point() << std::endl;
     std::cout << "\n--------------\n" << std::endl;
     for(auto e = cc_edges.begin(); e != cc_edges.end(); e++) {
+      std::cout << "\narc dual de e:\n" << std::endl;
+      Arc a = dtos.dual_on_sphere(*e);
+      std::cout << "source: " << a.source() << std::endl;
+      std::cout << "target: " << a.target() << std::endl;
       std::cout << "\nface de e:\n" << std::endl;
       std::cout << e->first->vertex(0)->point() << std::endl;
       std::cout << e->first->vertex(1)->point() << std::endl;

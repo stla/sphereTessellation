@@ -14,6 +14,7 @@ typedef CGAL::Exact_predicates_inexact_constructions_kernel          K;
 typedef CGAL::Projection_on_sphere_traits_3<K>                       Traits;
 typedef CGAL::Delaunay_triangulation_on_sphere_2<Traits>             DToS2;
 typedef Traits::Point_3                                              Point_3;
+typedef Traits::Arc_on_sphere_2                                      Arc;
 
 typedef CGAL::Container_from_circulator<DToS2::Edge_circulator> CC_Edges;
 
