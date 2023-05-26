@@ -34,6 +34,7 @@ int test() {
     for(auto e = cc_edges.begin(); e != cc_edges.end(); e++) {
       std::cout << "\narc dual de e:\n" << std::endl;
       Arc a = dtos.dual_on_sphere(*e);
+      const CGAL::Circular_arc_point_3 as = a.source();
       std::cout << "source: " << a.source() << std::endl;
       std::cout << "target: " << a.target() << std::endl;
       std::cout << "\nface de e:\n" << std::endl;
