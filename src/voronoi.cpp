@@ -7,7 +7,7 @@ Rcpp::List voronoi_cpp(Rcpp::NumericMatrix pts) {
   points.reserve(npoints);
   for(int i = 0; i < npoints; i++) {
     Rcpp::NumericVector pt_i = pts(Rcpp::_, i);
-    points.emplace_back(pt_i(0), pt_i(1), pt_i(2))
+    points.emplace_back(pt_i(0), pt_i(1), pt_i(2));
   }
   // ball
   Traits ball(Point3(0, 0, 0)); // radius is 1 by default
