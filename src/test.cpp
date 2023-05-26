@@ -2,13 +2,13 @@
 
 // [[Rcpp::export]]
 int test() {
-  std::vector<Point_3> points;
+  std::vector<Point3> points;
   points.emplace_back( 3,  1,  1);
   points.emplace_back(-8,  1,  1);
   points.emplace_back( 1,  2,  1);
   points.emplace_back( 1, -2,  1);
   points.emplace_back( 1,  1, 10);
-  Traits traits(Point_3(1,1,1)); // radius is 1 by default
+  Traits traits(Point3(1,1,1)); // radius is 1 by default
   DToS2 dtos(traits);
   Traits::Construct_point_on_sphere_2 cst = traits.construct_point_on_sphere_2_object();
   for(const auto& pt : points) {
@@ -28,6 +28,8 @@ int test() {
   for(auto v = vhs.begin(); v != vhs.end(); v++) {
     DToS2::Edge_circulator ec = dtos.incident_edges(*v);
     CC_Edges cc_edges(ec);
+    int cellsize = std::distance(cc_edges.begin(), cc_edges.end());
+    std::cout << "SIZE: " << cellsize << "\n" << std::endl;
     std::cout << "\n--------------\n" << std::endl;
     std::cout << "current vertex: " << (*v)->point() << std::endl;
     std::cout << "\n--------------\n" << std::endl;
