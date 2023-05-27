@@ -89,7 +89,7 @@ Rcpp::List delaunay_cpp(
   int nmeshes = dtos.number_of_solid_faces();
   Rcpp::List Meshes(nmeshes);
   for(int i = 0; i < nmeshes; i++) {
-    Rcpp::IntegerVector face = Faces(Rcpp::_, SolidFaces(i));
+    Rcpp::IntegerVector face = Faces(Rcpp::_, SolidFaces(i)-1);
     Rcpp::NumericVector A = Vertices(Rcpp::_, face(0)-1);
     Rcpp::NumericVector B = Vertices(Rcpp::_, face(1)-1);
     Rcpp::NumericVector C = Vertices(Rcpp::_, face(2)-1);
