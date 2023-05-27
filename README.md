@@ -15,3 +15,12 @@ ___
 ![](https://raw.githubusercontent.com/stla/sphereTessellation/main/inst/gifs/delaunay_spherical-septuaginta01.gif)
 
 ![](https://raw.githubusercontent.com/stla/sphereTessellation/main/inst/gifs/delaunay_spherical-loxodrome01.gif)
+
+___
+
+## License
+
+This package is provided under the GPL-3 license but it uses the C++ library 
+[CGAL](https://www.cgal.org/). If you wish to use CGAL for commercial purposes, 
+you must obtain a license from the [GeometryFactory](https://geometryfactory.com).
+

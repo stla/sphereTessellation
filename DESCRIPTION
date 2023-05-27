@@ -1,0 +1,21 @@
+Package: sphereTessellation
+Title: Delaunay and Voronoï Tessellations on the Sphere
+Version: 0.0.0.9000
+Authors@R: 
+    person("Stéphane", "Laurent", , "laurent_step@outlook.fr", role = c("aut", "cre"))
+Description: Performs Delaunay and Voronoï tessellations on spheres and
+    provides some functions to plot them. The algorithms are mainly performed by
+    the 'C++' library' CGAL' (<https://www.cgal.org/>).
+License: GPL-3
+URL: https://github.com/stla/sphereTessellation
+BugReports: https://github.com/stla/sphereTessellation/issues
+Imports: 
+    Rcpp,
+    rgl
+LinkingTo: 
+    BH,
+    Rcpp,
+    RcppCGAL,
+    RcppEigen
+Encoding: UTF-8
+RoxygenNote: 7.2.3
