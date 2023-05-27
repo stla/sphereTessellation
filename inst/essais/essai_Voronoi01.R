@@ -5,8 +5,9 @@ library(cgalMeshes)
 library(randomcoloR)
 library(pracma)
 
-n <- 20L
+n <- 40L
 vertices <- runif_on_sphere(n, 3L)
+vertices <- t(icosahedron3d()$vb[-4L, ])
 
 vor <- sphereTessellation:::voronoi_cpp(t(vertices))
 
@@ -20,7 +21,7 @@ plotVoronoiCell <- function(cell, color) {
     #B <- cart2sph(B)[2:1]
     C <- plgn[, i+1L]
     #C <- cart2sph(C)[2:1]
-    mesh <- sphericalTriangle(A, B, C)
+    mesh <- sphericalTriangle(-A, -B, -C)
     rmesh <- mesh$getMesh()
     shade3d(rmesh, color = color)
   }
@@ -28,12 +29,13 @@ plotVoronoiCell <- function(cell, color) {
     arc3d(plgn[, i], plgn[, i+1], c(0, 0, 0), 1, n = 50)
   }
   arc3d(plgn[, cellsize], plgn[, 1L], c(0, 0, 0), 1, n = 50)
-  points3d(t(plgn), color = "navy", size = 13)
+  #points3d(t(plgn), color = "navy", size = 13)
 }
 
-colors <- randomColor(length(vor), hue = "random", luminosity = "dark")
+colors <- randomColor(length(vor), hue = "random", luminosity = "bright")
 
 open3d(windowRect = 50 + c(0, 0, 512, 512))
+view3d(30, 30, zoom = 0.8)
 for(i in seq_along(vor)) {
   plotVoronoiCell(vor[[i]], colors[i])
 }
