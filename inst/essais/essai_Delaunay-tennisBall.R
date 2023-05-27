@@ -15,9 +15,10 @@ tennisball <- function(u, nlobes = 3, A = 0.44){
   cbind(y1, y2, y3)
 }
 
-npts <- 100L
-pts <- tennisball(seq(0, 2*pi, length.out = npts+1L)[-1L], nlobes = 10)
-
+npts <- 400L
+pts <- tennisball(seq(0, 2*pi, length.out = npts+1L)[-1L], nlobes = 5, A = 0.3)
+# voronoi nice with nlobes=10 and npts=100
+pts <- rbind(pts, c(1, 0, 0), c(-1, 0, 0))
 points3d(pts)
 
 del <- sphereTessellation:::delaunay_cpp(t(pts))
