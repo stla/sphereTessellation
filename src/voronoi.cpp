@@ -1,12 +1,14 @@
 #include "sphereTessellation.h"
 
+// -------------------------------------------------------------------------- //
+// -------------------------------------------------------------------------- //
 Rcpp::List joinMeshes(Rcpp::List mesh1, Rcpp::List mesh2) {
   Rcpp::NumericMatrix Vertices1 = mesh1["vertices"];
   Rcpp::NumericMatrix Vertices2 = mesh2["vertices"];
-  Rcpp::NumericMatrix Normals1 = mesh1["normals"];
-  Rcpp::NumericMatrix Normals2 = mesh2["normals"];
-  Rcpp::IntegerMatrix Faces1 = mesh1["faces"];
-  Rcpp::IntegerMatrix Faces2 = mesh2["faces"];
+  Rcpp::NumericMatrix Normals1  = mesh1["normals"];
+  Rcpp::NumericMatrix Normals2  = mesh2["normals"];
+  Rcpp::IntegerMatrix Faces1    = mesh1["faces"];
+  Rcpp::IntegerMatrix Faces2    = mesh2["faces"];
   //
   const int nvertices1 = Vertices1.ncol();
   return Rcpp::List::create(
@@ -16,7 +18,8 @@ Rcpp::List joinMeshes(Rcpp::List mesh1, Rcpp::List mesh2) {
   );
 }
 
-
+// -------------------------------------------------------------------------- //
+// -------------------------------------------------------------------------- //
 // [[Rcpp::export]]
 Rcpp::List voronoi_cpp(
     Rcpp::NumericMatrix pts, double radius, Rcpp::NumericVector O, int niter
@@ -53,11 +56,10 @@ Rcpp::List voronoi_cpp(
     Rcpp::stop("The triangulation is just a polygon drawn on a circle.");
   }
   // messages
-  Rcpp::Rcout << "The triangulation has "
-              << dtos.number_of_vertices() << " vertices and\n";
-  Rcpp::Rcout << dtos.number_of_edges() << " edges and\n";
-  Rcpp::Rcout << dtos.number_of_solid_faces() << " solid faces\n";
-  Rcpp::Rcout << dtos.number_of_ghost_faces() << " ghost faces\n";
+  const int nghostFaces = dtos.number_of_ghost_faces();
+  if(nghostFaces != 0) {
+    Rcpp::warning("There are some ghost faces in the Delaunay triangulation.");
+  }
   // make Voronoï cells
   const int ncells = dtos.number_of_vertices();
   Rcpp::List Voronoi(ncells);
@@ -80,14 +82,14 @@ Rcpp::List voronoi_cpp(
         Cell(Rcpp::_, i++) = vv;
       }
     }
-    Rcpp::NumericVector A = Cell(Rcpp::_, 0);
-    Rcpp::NumericVector B = Cell(Rcpp::_, 1);
-    Rcpp::NumericVector C = Cell(Rcpp::_, 2);
+    const Rcpp::NumericVector A = Cell(Rcpp::_, 0);
+    const Rcpp::NumericVector B = Cell(Rcpp::_, 1);
+    const Rcpp::NumericVector C = Cell(Rcpp::_, 2);
     Rcpp::List smesh = sTriangle(A, B, C, radius, O, niter);
     for(int i = 2; i < cellsize-1; i++) {
       smesh = joinMeshes(
         smesh,
-        sTriangle(A, Cell(Rcpp::_, i), Cell(Rcpp::_, i + 1), radius, O, niter)
+        sTriangle(A, Cell(Rcpp::_, i), Cell(Rcpp::_, i+1), radius, O, niter)
       );
     }
     //

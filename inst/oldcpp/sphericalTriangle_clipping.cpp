@@ -1,5 +1,15 @@
 #include "sphereTessellation.h"
 
+//#include <CGAL/boost/graph/generators.h>
+//#include <CGAL/Polygon_mesh_processing/clip.h>
+//#include <CGAL/Plane_3.h>
+//#include <CGAL/Subdivision_method_3/subdivision_methods_3.h>
+//typedef K::Plane_3                                       Plane3;
+
+//namespace PMP = CGAL::Polygon_mesh_processing;
+
+
+
 void clippingToPlane(Mesh3& mesh, Plane3 plane) {
   const bool clipping = PMP::clip(
     mesh, plane,

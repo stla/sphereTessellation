@@ -44,17 +44,19 @@ Rcpp::List delaunay_cpp(
     Rcpp::stop("The triangulation is just a polygon drawn on a circle.");
   }
   // messages
-  Rcpp::Rcout << "The triangulation has "
-              << dtos.number_of_vertices() << " vertices and\n";
-  Rcpp::Rcout << dtos.number_of_edges() << " edges and\n";
-  Rcpp::Rcout << dtos.number_of_solid_faces() << " solid faces\n";
-  Rcpp::Rcout << dtos.number_of_ghost_faces() << " ghost faces\n";
+  const int nsolidFaces = dtos.number_of_solid_faces();
+  const int nghostFaces = dtos.number_of_ghost_faces();
+  const std::string word1 = nsolidFaces > 1 ? "faces" : "face";
+  const std::string word2 = nghostFaces > 1 ? "faces" : "face";
+  const std::string msg =
+    "The triangulation has " + std::to_string(nsolidFaces) + " solid " + word1
+      + " and " + std::to_string(nghostFaces) + " ghost " + word2 + ".";
+  Message(msg);
   // Rcpp matrix to store the faces
-  int nfaces = dtos.number_of_faces();
+  const int nfaces = dtos.number_of_faces();
   Rcpp::IntegerMatrix Faces(3, nfaces);
   // Rcpp vector to store the solid faces
-  int nsolidfaces = dtos.number_of_solid_faces();
-  Rcpp::IntegerVector SolidFaces(nsolidfaces);
+  Rcpp::IntegerVector SolidFaces(nsolidFaces);
   // all vertex handles
   DToS2::Vertex_handles vhs = dtos.vertex_handles();
   // iterate over all faces
@@ -86,13 +88,13 @@ Rcpp::List delaunay_cpp(
     faceIndex++;
   }
   // Meshes of spherical triangles
-  int nmeshes = dtos.number_of_solid_faces();
+  const int nmeshes = dtos.number_of_solid_faces();
   Rcpp::List Meshes(nmeshes);
   for(int i = 0; i < nmeshes; i++) {
-    Rcpp::IntegerVector face = Faces(Rcpp::_, SolidFaces(i)-1);
-    Rcpp::NumericVector A = Vertices(Rcpp::_, face(0)-1);
-    Rcpp::NumericVector B = Vertices(Rcpp::_, face(1)-1);
-    Rcpp::NumericVector C = Vertices(Rcpp::_, face(2)-1);
+    const Rcpp::IntegerVector face = Faces(Rcpp::_, SolidFaces(i)-1);
+    const Rcpp::NumericVector A = Vertices(Rcpp::_, face(0)-1);
+    const Rcpp::NumericVector B = Vertices(Rcpp::_, face(1)-1);
+    const Rcpp::NumericVector C = Vertices(Rcpp::_, face(2)-1);
     Meshes(i) = sTriangle(A, B, C, radius, O, niter);
   }
   //
