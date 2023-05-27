@@ -33,13 +33,21 @@ Rcpp::List delaunay_cpp(Rcpp::NumericMatrix pts) {
   // Rcpp matrix to store the faces
   int nfaces = dtos.number_of_faces();
   Rcpp::IntegerMatrix Faces(3, nfaces);
+  // Rcpp vector to store the solid faces
+  int nsolidfaces = dtos.number_of_solid_faces();
+  Rcpp::IntegerVector SolidFaces(nsolidfaces);
   // all vertex handles
   DToS2::Vertex_handles vhs = dtos.vertex_handles();
   // iterate over all faces
   DToS2::All_faces_iterator itbegin = dtos.all_faces_begin();
   DToS2::All_faces_iterator itend = dtos.all_faces_end();
   int faceIndex = 0;
+  int solidfaceIndex = 0;
   for(auto f = itbegin; f != itend; f++) {
+    if(!f->is_ghost()) {
+      SolidFaces(solidfaceIndex++) = faceIndex + 1;
+    }
+    // make the face
     Rcpp::IntegerVector Face(3);
     // iterate over vertices
     int iter = 1;
@@ -60,7 +68,8 @@ Rcpp::List delaunay_cpp(Rcpp::NumericMatrix pts) {
   }
   //
   return Rcpp::List::create(
-    Rcpp::Named("vertices") = Rcpp::transpose(Vertices),
-    Rcpp::Named("faces")    = Rcpp::transpose(Faces)
+    Rcpp::Named("vertices")   = Rcpp::transpose(Vertices),
+    Rcpp::Named("faces")      = Rcpp::transpose(Faces),
+    Rcpp::Named("solidFaces") = SolidFaces
   );
 }

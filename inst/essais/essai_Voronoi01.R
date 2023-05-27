@@ -25,10 +25,10 @@ plotVoronoiCell <- function(cell, color) {
     rmesh <- mesh$getMesh()
     shade3d(rmesh, color = color)
   }
-  for(i in 1L:(cellsize-1L)) {
-    arc3d(plgn[, i], plgn[, i+1], c(0, 0, 0), 1, n = 50)
-  }
-  arc3d(plgn[, cellsize], plgn[, 1L], c(0, 0, 0), 1, n = 50)
+  # for(i in 1L:(cellsize-1L)) {
+  #   arc3d(plgn[, i], plgn[, i+1], c(0, 0, 0), 1, n = 50)
+  # }
+  # arc3d(plgn[, cellsize], plgn[, 1L], c(0, 0, 0), 1, n = 50)
   #points3d(t(plgn), color = "navy", size = 13)
 }
 

@@ -5,10 +5,12 @@ library(cgalMeshes)
 library(randomcoloR)
 
 
-n <- 20L
+set.seed(314L)
+n <- 6L
 vertices <- runif_on_sphere(n, 3L)
 
 del <- sphereTessellation:::delaunay_cpp(t(vertices))
+
 Faces <- del[["faces"]]
 Vertices <- del[["vertices"]]
 
@@ -27,6 +29,6 @@ colors <- randomColor(nfaces, hue = "random", luminosity = "bright")
 
 open3d(windowRect = 50 + c(0, 0, 512, 512))
 view3d(30, 30, zoom = 0.8)
-for(i in 1L:nfaces) {
+for(i in del[["solidFaces"]]) {
   plotDelaunayFace(i, colors[i])
 }
