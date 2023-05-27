@@ -12,7 +12,7 @@ lox <- function(t, a){
 
 npts <- 200L
 h <- 20
-pts <- lox(seq(-h, h, length.out = npts), a = .05)
+pts <- lox(seq(-h, h, length.out = npts), a = .075)
 pts <- rbind(pts, c(0, 0, 1), c(0, 0, -1))
 
 spheres3d(0, 0, 0, color = "yellow", alpha = 0.3)
