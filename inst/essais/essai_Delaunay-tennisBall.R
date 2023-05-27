@@ -15,8 +15,10 @@ tennisball <- function(u, nlobes = 3, A = 0.44){
   cbind(y1, y2, y3)
 }
 
-npts <- 150L
-pts <- tennisball(seq(0, 2*pi, length.out = npts+1L)[-1L])
+npts <- 100L
+pts <- tennisball(seq(0, 2*pi, length.out = npts+1L)[-1L], nlobes = 10)
+
+points3d(pts)
 
 del <- sphereTessellation:::delaunay_cpp(t(pts))
 Faces <- del[["faces"]]
@@ -55,7 +57,7 @@ ndist <- function(xyz, faceIndex) {
 
 #fcol <- colorRamp(hcl.colors(100L, "Grays"), bias = 0.5, interpolate = "spline")
 grays <- vapply(seq(0, 1, len = 256), function(u) rgb(u, u, u), character(1L))
-fcol <- colorRamp(grays, bias = 0.1, interpolate = "spline")
+fcol <- colorRamp(grays, bias = 1, interpolate = "linear")
 
 clr <- function(xyz, i) {
   RGB <- fcol(ndist(xyz, i))
@@ -73,7 +75,7 @@ plotDelaunayFace <- function(i) {
   colors <- apply(vs, 1L, function(xyz) clr(xyz, i))
   mesh$assignVertexColors(colors)
   rmesh <- mesh$getMesh()
-  shade3d(rmesh, meshColor = "vertices", specular = "black")
+  shade3d(rmesh, meshColor = "vertices", specular = "yellow")
 }
 
 open3d(windowRect = 50 + c(0, 0, 512, 512))

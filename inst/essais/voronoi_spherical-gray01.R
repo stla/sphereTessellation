@@ -99,7 +99,7 @@ for(i in seq_along(vor)) {
 
 # animation ####
 movie3d(
-  spin3d(axis = c(0, 1, 0), rpm = 10),
+  spin3d(axis = c(1, 1, 1), rpm = 10),
   duration = 6, fps = 20,
   movie = "zzpic", dir = ".",
   convert = FALSE,
@@ -111,7 +111,7 @@ library(gifski)
 pngfiles <- Sys.glob("zzpic*.png")
 gifski(
   png_files = pngfiles,
-  gif_file = "voronoi_spherical-gray01.gif",
+  gif_file = "voronoi_spherical-fibonacci01.gif",
   width = 512,
   height = 512,
   delay = 1/12

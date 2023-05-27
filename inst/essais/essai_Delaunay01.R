@@ -14,6 +14,17 @@ del <- sphereTessellation:::delaunay_cpp(t(vertices))
 Faces <- del[["faces"]]
 Vertices <- del[["vertices"]]
 
+colors <- rep("red", nrow(Faces))
+colors[del$solidFaces] <- "blue"
+rmesh <- tmesh3d(
+  vertices = t(Vertices),
+  indices = t(Faces),
+  material = list(color = colors)
+)
+shade3d(rmesh, meshColor = "faces")
+
+
+
 plotDelaunayFace <- function(i, color) {
   face <- Faces[i, ]
   A <- Vertices[face[1L], ]
