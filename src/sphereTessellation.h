@@ -33,4 +33,9 @@ typedef Mesh3::Vertex_index                              VX3;
 
 //namespace PMP = CGAL::Polygon_mesh_processing;
 
+Rcpp::List sTriangle(
+    Rcpp::NumericVector, Rcpp::NumericVector, Rcpp::NumericVector,
+    double, Rcpp::NumericVector, int
+);
+
 #endif

@@ -103,6 +103,6 @@ Rcpp::List sTriangle(
   return Rcpp::List::create(
     Rcpp::Named("vertices") = Vertices,
     Rcpp::Named("faces")    = Faces,
-    Rcpp::Named("normals")  = Normals
+    Rcpp::Named("normals")  = Rcpp::transpose(Normals)
   );
 }

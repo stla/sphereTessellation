@@ -1,7 +1,9 @@
 #include "sphereTessellation.h"
 
 // [[Rcpp::export]]
-Rcpp::List delaunay_cpp(Rcpp::NumericMatrix pts) {
+Rcpp::List delaunay_cpp(
+    Rcpp::NumericMatrix pts, double radius, Rcpp::NumericVector O, int niter
+) {
   const int npoints = pts.ncol();
   std::vector<SPoint3> points;
   points.reserve(npoints);
@@ -10,7 +12,7 @@ Rcpp::List delaunay_cpp(Rcpp::NumericMatrix pts) {
     points.emplace_back(pt_i(0), pt_i(1), pt_i(2));
   }
   // ball
-  Traits ball(SPoint3(0, 0, 0)); // radius is 1 by default
+  Traits ball(SPoint3(O(0), O(1), O(2)), radius);
   // projection on this ball
   Traits::Construct_point_on_sphere_2 projection =
     ball.construct_point_on_sphere_2_object();
@@ -83,10 +85,21 @@ Rcpp::List delaunay_cpp(Rcpp::NumericMatrix pts) {
     }
     faceIndex++;
   }
+  // Meshes of spherical triangles
+  int nmeshes = dtos.number_of_solid_faces();
+  Rcpp::List Meshes(nmeshes);
+  for(int i = 0; i < nmeshes; i++) {
+    Rcpp::IntegerVector face = Faces(Rcpp::_, SolidFaces(i));
+    Rcpp::NumericVector A = Vertices(Rcpp::_, face(0)-1);
+    Rcpp::NumericVector B = Vertices(Rcpp::_, face(1)-1);
+    Rcpp::NumericVector C = Vertices(Rcpp::_, face(2)-1);
+    Meshes(i) = sTriangle(A, B, C, radius, O, niter);
+  }
   //
   return Rcpp::List::create(
     Rcpp::Named("vertices")   = Rcpp::transpose(Vertices),
     Rcpp::Named("faces")      = Rcpp::transpose(Faces),
-    Rcpp::Named("solidFaces") = SolidFaces
+    Rcpp::Named("solidFaces") = SolidFaces,
+    Rcpp::Named("meshes")     = Meshes
   );
 }
