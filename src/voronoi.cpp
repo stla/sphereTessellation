@@ -8,10 +8,10 @@ Rcpp::List joinMeshes(Rcpp::List mesh1, Rcpp::List mesh2) {
   Rcpp::IntegerMatrix Faces1 = mesh1["faces"];
   Rcpp::IntegerMatrix Faces2 = mesh2["faces"];
   //
-  const int nfaces1 = Faces1.ncol();
+  const int nvertices1 = Vertices1.ncol();
   return Rcpp::List::create(
     Rcpp::Named("vertices") = Rcpp::cbind(Vertices1, Vertices2),
-    Rcpp::Named("faces")    = Rcpp::cbind(Faces1, Faces2 + nfaces1),
+    Rcpp::Named("faces")    = Rcpp::cbind(Faces1, Faces2 + nvertices1),
     Rcpp::Named("normals")  = Rcpp::cbind(Normals1, Normals2)
   );
 }
@@ -84,10 +84,11 @@ Rcpp::List voronoi_cpp(
     Rcpp::NumericVector B = Cell(Rcpp::_, 1);
     Rcpp::NumericVector C = Cell(Rcpp::_, 2);
     Rcpp::List smesh = sTriangle(A, B, C, radius, O, niter);
-    for(int i = 2; i < cellsize-2; i++) {
-      B = C;
-      C = Cell(Rcpp::_, i + 1);
-      smesh = joinMeshes(smesh, sTriangle(A, B, C, radius, O, niter));
+    for(int i = 2; i < cellsize-1; i++) {
+      smesh = joinMeshes(
+        smesh,
+        sTriangle(A, Cell(Rcpp::_, i), Cell(Rcpp::_, i + 1), radius, O, niter)
+      );
     }
     //
     Voronoi(k++) = Rcpp::List::create(
