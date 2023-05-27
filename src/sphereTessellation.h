@@ -9,6 +9,7 @@
 //#include <boost/iterator/transform_iterator.hpp>
 #include <CGAL/circulator.h>
 #include <CGAL/Circular_arc_point_3.h>
+#include <CGAL/Triangulation_vertex_base_with_info_2.h>
 
 typedef CGAL::Exact_predicates_inexact_constructions_kernel          K;
 typedef CGAL::Projection_on_sphere_traits_3<K>                       Traits;
@@ -18,5 +19,6 @@ typedef Traits::Arc_on_sphere_2                                      Arc;
 
 
 typedef CGAL::Container_from_circulator<DToS2::Edge_circulator> CC_Edges;
+typedef CGAL::Container_from_circulator<DToS2::Vertex_circulator> CC_Vertices;
 
 #endif
