@@ -1,7 +1,26 @@
 #include "sphereTessellation.h"
 
+Rcpp::List joinMeshes(Rcpp::List mesh1, Rcpp::List mesh2) {
+  Rcpp::NumericMatrix Vertices1 = mesh1["vertices"];
+  Rcpp::NumericMatrix Vertices2 = mesh2["vertices"];
+  Rcpp::NumericMatrix Normals1 = mesh1["normals"];
+  Rcpp::NumericMatrix Normals2 = mesh2["normals"];
+  Rcpp::IntegerMatrix Faces1 = mesh1["faces"];
+  Rcpp::IntegerMatrix Faces2 = mesh2["faces"];
+  //
+  const int nfaces1 = Faces1.ncol();
+  return Rcpp::List::create(
+    Rcpp::Named("vertices") = Rcpp::cbind(Vertices1, Vertices2),
+    Rcpp::Named("faces")    = Rcpp::cbind(Faces1, Faces2 + nfaces1),
+    Rcpp::Named("normals")  = Rcpp::cbind(Normals1, Normals2)
+  );
+}
+
+
 // [[Rcpp::export]]
-Rcpp::List voronoi_cpp(Rcpp::NumericMatrix pts) {
+Rcpp::List voronoi_cpp(
+    Rcpp::NumericMatrix pts, double radius, Rcpp::NumericVector O, int niter
+) {
   const int npoints = pts.ncol();
   std::vector<SPoint3> points;
   points.reserve(npoints);
@@ -10,7 +29,7 @@ Rcpp::List voronoi_cpp(Rcpp::NumericMatrix pts) {
     points.emplace_back(pt_i(0), pt_i(1), pt_i(2));
   }
   // ball
-  Traits ball(SPoint3(0, 0, 0)); // radius is 1 by default
+  Traits ball(SPoint3(O(0), O(1), O(2)), radius);
   // projection on this ball
   Traits::Construct_point_on_sphere_2 projection =
     ball.construct_point_on_sphere_2_object();
@@ -51,18 +70,32 @@ Rcpp::List voronoi_cpp(Rcpp::NumericMatrix pts) {
     const CC_Edges cc_edges(ec);
     const int cellsize = std::distance(cc_edges.begin(), cc_edges.end());
     Rcpp::NumericMatrix Cell(3, cellsize);
-    int i = 0;
-    for(auto e = cc_edges.begin(); e != cc_edges.end(); e++) {
-      const Arc arc = dtos.dual_on_sphere(*e);
-      const CGAL::Circular_arc_point_3 startpoint = arc.source();
-      const Rcpp::NumericVector vv =
-        {startpoint.x(), startpoint.y(), startpoint.z()};
-      Cell(Rcpp::_, i++) = vv;
+    {
+      int i = 0;
+      for(auto e = cc_edges.begin(); e != cc_edges.end(); e++) {
+        const Arc arc = dtos.dual_on_sphere(*e);
+        const CGAL::Circular_arc_point_3 startpoint = arc.source();
+        const Rcpp::NumericVector vv =
+          {startpoint.x(), startpoint.y(), startpoint.z()};
+        Cell(Rcpp::_, i++) = vv;
+      }
     }
+    Rcpp::NumericVector A = Cell(Rcpp::_, 0);
+    Rcpp::NumericVector B = Cell(Rcpp::_, 1);
+    Rcpp::NumericVector C = Cell(Rcpp::_, 2);
+    Rcpp::List smesh = sTriangle(A, B, C, radius, O, niter);
+    for(int i = 2; i < cellsize-2; i++) {
+      B = C;
+      C = Cell(Rcpp::_, i + 1);
+      smesh = joinMeshes(smesh, sTriangle(A, B, C, radius, O, niter));
+    }
+    //
     Voronoi(k++) = Rcpp::List::create(
       Rcpp::Named("site") = site,
-      Rcpp::Named("cell") = Cell
+      Rcpp::Named("cell") = Cell,
+      Rcpp::Named("mesh") = smesh
     );
   }
+  //
   return Voronoi;
 }

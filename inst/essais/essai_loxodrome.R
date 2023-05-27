@@ -10,9 +10,10 @@ lox <- function(t, a){
   cbind(cos(t)/d, sin(t)/d, -a*t/d)
 }
 
-npts <- 100L
-h <- 14
-pts <- lox(seq(-h, h, length.out = npts), a = .1)
+npts <- 200L
+h <- 20
+pts <- lox(seq(-h, h, length.out = npts), a = .05)
+pts <- rbind(pts, c(0, 0, 1), c(0, 0, -1))
 
 spheres3d(0, 0, 0, color = "yellow", alpha = 0.3)
 points3d(pts)

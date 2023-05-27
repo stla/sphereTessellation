@@ -16,7 +16,7 @@ plotDelaunayFace <- function(i, color) {
   rmesh <- tmesh3d(
     vertices = smesh[["vertices"]],
     indices  = smesh[["faces"]],
-    normals  = smesh[["normals"]]
+    normals  = t(smesh[["normals"]])
   )
   shade3d(rmesh, color = color)
 }
