@@ -23,7 +23,7 @@ Rcpp::List delaunay_cpp(Rcpp::NumericMatrix pts) {
     Point3 p = projection(pt);
     dtos.insert(p);
     Rcpp::NumericVector v_i = {p.x(), p.y(), p.z()};
-    Vertices(Rcpp::_, i++) = vi;
+    Vertices(Rcpp::_, i++) = v_i;
   }
   Rcpp::Rcout << "The triangulation has dimension: " << dtos.dimension() << " and\n";
   Rcpp::Rcout << dtos.number_of_vertices() << " vertices and\n";
@@ -42,14 +42,14 @@ Rcpp::List delaunay_cpp(Rcpp::NumericMatrix pts) {
   for(auto f = itbegin; f != itend; f++) {
     Rcpp::IntegerVector Face(3);
     // iterate over vertices
-    int iter = 0;
+    int iter = 1;
     int count = 0;
     for(auto v = vhs.begin(); v != vhs.end(); v++) {
       int index;
       bool test = f->has_vertex(*v, index);
       if(test) {
         Face(index) = iter;
-        if(count++ == 3) {
+        if(++count == 3) {
           Faces(Rcpp::_, faceIndex) = Face;
           break;
         }
@@ -60,7 +60,7 @@ Rcpp::List delaunay_cpp(Rcpp::NumericMatrix pts) {
   }
   //
   return Rcpp::List::create(
-    Rcpp::Named("vertices") = Vertices,
-    Rcpp::Named("faces")    = Faces
+    Rcpp::Named("vertices") = Rcpp::transpose(Vertices),
+    Rcpp::Named("faces")    = Rcpp::transpose(Faces)
   );
 }
