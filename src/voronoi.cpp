@@ -22,7 +22,7 @@ Rcpp::List voronoi_cpp(Rcpp::NumericMatrix pts) {
   Rcpp::Rcout << "The triangulation has dimension: " << dtos.dimension() << " and\n";
   Rcpp::Rcout << dtos.number_of_vertices() << " vertices and\n";
   Rcpp::Rcout << dtos.number_of_edges() << " edges and\n";
-  Rcpp::Rcout << dtos.number_of_faces() << " solid faces\n";
+  Rcpp::Rcout << dtos.number_of_solid_faces() << " solid faces\n";
   Rcpp::Rcout << dtos.number_of_ghost_faces() << " ghost faces\n";
   // make Voronoï cells
   const int ncells = dtos.number_of_vertices();

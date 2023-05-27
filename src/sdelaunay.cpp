@@ -35,8 +35,10 @@ int sdelaunay() {
     int i = 0;
     int count = 0;
     for(auto v = vhs.begin(); v != vhs.end(); v++) {
-      if(f->has_vertex(*v)) {
-        std::cout << i << std::endl;
+      int index;
+      bool test = f->has_vertex(*v, index);
+      if(test) {
+        std::cout << "vertex " << i << " at position " << index << std::endl;
         if(count++ == 3) {
           break;
         }
