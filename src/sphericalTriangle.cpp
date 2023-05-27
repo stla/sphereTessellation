@@ -80,7 +80,7 @@ Rcpp::List sTriangle(
     for(const VX3& vd : newmesh.vertices()) {
       const Point3 pt = newmesh.point(vd);
       Rcpp::NumericVector col_i = {pt.x(), pt.y(), pt.z()};
-      Vertices(Rcpp::_, i++) = col_i;
+      Vertices(Rcpp::_, i) = col_i;
       Normals(Rcpp::_, i++) = col_i - O;
     }
   }
