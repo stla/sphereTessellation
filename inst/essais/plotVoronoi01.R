@@ -11,11 +11,14 @@ VoronoiOnSphere <- function(
     t(vertices), radius, center, as.integer(iterations)
   )
   attr(vor, "radius") <- radius
+  attr(vor, "center") <- center
   vor
 }
 
 
-geodist <- function(A, B, radius) {
+geodist <- function(A, B, radius, center) {
+  A <- A - center
+  B <- B - center
   s2_distance(
     s2_point(A[1L], A[2L], A[3L]),
     s2_point(B[1L], B[2L], B[3L]),
@@ -24,17 +27,17 @@ geodist <- function(A, B, radius) {
 }
 
 
-plotVoronoiCell <- function(site, cell, mesh, radius) {
+plotVoronoiCell <- function(site, cell, mesh, radius, center) {
 
   dists <- apply(cell, 2L, function(xyz) {
-    geodist(xyz, site, radius)
+    geodist(xyz, site, radius, center)
   })
   maxDist <- max(dists)
 
   fcol <- colorRamp(trek_pal("klingon"), bias = 1, interpolate = "spline")
 
   clr <- function(xyz) {
-    RGB <- fcol(min(1, geodist(xyz, site, radius) / maxDist))
+    RGB <- fcol(min(1, geodist(xyz, site, radius, center) / maxDist))
     rgb(RGB[1L, 1L], RGB[1L, 2L], RGB[1L, 3L], maxColorValue = 255)
   }
 
@@ -48,23 +51,30 @@ plotVoronoiCell <- function(site, cell, mesh, radius) {
   shade3d(rmesh, meshColor = "vertices", specular = "black")
 }
 
-# plotVoronoiEdges <- function(vcell) {
-#   plgn <- vcell[["cell"]]
-#   cellsize <- ncol(plgn)
-#   for(i in 1L:(cellsize-1L)) {
-#     arc3d(plgn[, i], plgn[, i+1], c(0, 0, 0), 1, n = 50,
-#           color = "white", lwd = 3, depth_test = "lequal")
-#   }
-#   arc3d(plgn[, cellsize], plgn[, 1L], c(0, 0, 0), 1, n = 50,
-#         color = "white", lwd = 3, depth_test = "lequal")
-#   #points3d(t(plgn), color = "navy", size = 13)
-# }
+plotVoronoiEdges <- function(cell, radius, center) {
+  cellsize <- ncol(cell)
+  cell <- cbind(cell, cell[, 1L])
+  for(i in 1L:cellsize) {
+    arc3d(cell[, i], cell[, i+1L], center, radius, n = 50,
+          color = "white", lwd = 3, depth_test = "lequal")
+  }
+}
 
-plotVoronoi <- function(vor) {
+plotVoronoiOnSphere <- function(vor, edges = FALSE, sites = FALSE) {
   radius <- attr(vor, "radius")
+  center <- attr(vor, "center")
   for(i in seq_along(vor)) {
     vor_i <- vor[[i]]
-    plotVoronoiCell(vor_i[["site"]], vor_i[["cell"]], vor_i[["mesh"]], radius)
+    plotVoronoiCell(
+      vor_i[["site"]], vor_i[["cell"]], vor_i[["mesh"]],
+      radius, center
+    )
+    if(edges) {
+      plotVoronoiEdges(vor_i[["cell"]], radius, center)
+    }
+    if(sites) {
+      spheres3d(rbind(vor_i[["site"]]), radius = radius/50, color = "navy")
+    }
   }
 }
 
@@ -77,10 +87,5 @@ open3d(windowRect = 50 + c(0, 0, 512, 512))
 view3d(0, 0, zoom = 0.7)
 clear3d(type = "lights")
 light3d(x = -50, y = 100, z = 100, ambient = "white")
-plotVoronoi(vor)
-
-# for(i in seq_along(vor)) {
-#   plotVoronoiEdges(vor[[i]])
-# }
-
+plotVoronoiOnSphere(vor)
 
