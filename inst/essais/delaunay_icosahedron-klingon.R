@@ -7,14 +7,14 @@ pts <- t(icosahedron3d()$vb[-4L, ])
 radius <- sqrt(c(crossprod(pts[1L, ])))
 
 del <- sphereTessellation:::delaunay_cpp(
-  t(pts)/radius, radius = 1, O = c(0, 0, 0), niter = 5
+  t(pts), radius = radius, O = c(0, 0, 0), niter = 5
 )
 Faces <- del$faces
 Vertices <- del$vertices
 
 geodist <- function(centroid, B) {
   s2_distance(
-    centroid, s2_point(B[1L], B[2L], B[3L]), radius = 1
+    centroid, s2_point(B[1L], B[2L], B[3L]), radius = radius
   )
 }
 
