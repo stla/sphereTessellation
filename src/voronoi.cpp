@@ -66,7 +66,8 @@ Rcpp::List voronoi_cpp(
   const DToS2::Vertex_handles vhs = dtos.vertex_handles();
   int k = 0;
   for(auto v = vhs.begin(); v != vhs.end(); v++) {
-    const SPoint3 coords = (*v)->point();
+    const SPoint3 coords =
+      (*v)->point().get_projection(ball.center(), ball.radius());
     const Rcpp::NumericVector site = {coords.x(), coords.y(), coords.z()};
     const DToS2::Edge_circulator ec = dtos.incident_edges(*v);
     const CC_Edges cc_edges(ec);
