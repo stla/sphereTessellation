@@ -19,14 +19,16 @@ Rcpp::List delaunay_cpp(
   // Rcpp matrix to store the projected vertices
   Rcpp::NumericMatrix Vertices(3, npoints);
   // make Delaunay triangulation
-  DToS2 dtos(ball);
+  DToS dtos(ball);
   {
     int i = 0;
     for(const auto& pt : points) {
-      SPoint3 p = projection(pt);
-      dtos.insert(p);
+      Traits::Point_on_sphere_2 p = projection(pt);
+      DToS::Vertex_handle vh = dtos.insert(p);
       Rcpp::NumericVector v_i = {p.x(), p.y(), p.z()};
       Vertices(Rcpp::_, i++) = v_i;
+      int& index = vh->info();
+      index = i;
     }
   }
   // check dimension
@@ -55,13 +57,11 @@ Rcpp::List delaunay_cpp(
   // Rcpp matrix to store the faces
   const int nfaces = dtos.number_of_faces();
   Rcpp::IntegerMatrix Faces(3, nfaces);
-  // Rcpp vector to store the solid faces
+  // Rcpp vector to store the indices of the solid faces
   Rcpp::IntegerVector SolidFaces(nsolidFaces);
-  // all vertex handles
-  DToS2::Vertex_handles vhs = dtos.vertex_handles();
   // iterate over all faces
-  DToS2::All_faces_iterator itbegin = dtos.all_faces_begin();
-  DToS2::All_faces_iterator itend = dtos.all_faces_end();
+  DToS::All_faces_iterator itbegin = dtos.all_faces_begin();
+  DToS::All_faces_iterator itend = dtos.all_faces_end();
   int faceIndex = 0;
   int solidfaceIndex = 0;
   for(auto f = itbegin; f != itend; f++) {
@@ -69,23 +69,12 @@ Rcpp::List delaunay_cpp(
       SolidFaces(solidfaceIndex++) = faceIndex + 1;
     }
     // make the face
-    Rcpp::IntegerVector Face(3);
-    // iterate over vertices
-    int iter = 1;
-    int count = 0;
-    for(auto v = vhs.begin(); v != vhs.end(); v++) {
-      int index;
-      const bool test = f->has_vertex(*v, index);
-      if(test) {
-        Face(index) = iter;
-        if(++count == 3) {
-          Faces(Rcpp::_, faceIndex) = Face;
-          break;
-        }
-      }
-      iter++;
-    }
-    faceIndex++;
+    Rcpp::IntegerVector Face = {
+      f->vertex(0)->info(),
+      f->vertex(1)->info(),
+      f->vertex(2)->info()
+    };
+    Faces(Rcpp::_, faceIndex++) = Face;
   }
   // Meshes of spherical triangles
   const int nmeshes = dtos.number_of_solid_faces();
