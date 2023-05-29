@@ -4,7 +4,13 @@
 \alias{plotVoronoiOnSphere}
 \title{Plot spherical Voronoï tessellation}
 \usage{
-plotVoronoiOnSphere(vor, edges = FALSE, sites = FALSE)
+plotVoronoiOnSphere(
+  vor,
+  colors = "palette",
+  palette = "Rocket",
+  edges = FALSE,
+  sites = FALSE
+)
 }
 \arguments{
 \item{vor}{an output of \code{\link{VoronoiOnSphere}}}

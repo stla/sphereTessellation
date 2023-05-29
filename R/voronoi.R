@@ -42,14 +42,16 @@ geodist <- function(A, B, radius, center) {
 #' @importFrom grDevices colorRamp rgb
 #' @importFrom rgl tmesh3d shade3d
 #' @noRd
-plotVoronoiCell <- function(site, cell, mesh, radius, center) {
+plotVoronoiCell <- function(
+    site, cell, mesh, radius, center, palette
+) {
 
   dists <- apply(cell, 2L, function(xyz) {
     geodist(xyz, site, radius, center)
   })
   maxDist <- max(dists)
 
-  fcol <- colorRamp(trek_pal("klingon"), bias = 1, interpolate = "spline")
+  fcol <- colorRamp(palette, bias = 1, interpolate = "spline")
 
   clr <- function(xyz) {
     RGB <- fcol(min(1, geodist(xyz, site, radius, center) / maxDist))
@@ -87,20 +89,26 @@ plotVoronoiEdges <- function(cell, radius, center) {
 #' @return No value is returned.
 #'
 #' @importFrom rgl spheres3d
+#' @importFrom grDevices hcl.colors
 #' @export
 #'
 #' @examples
 #' library(sphereTessellation)
-plotVoronoiOnSphere <- function(vor, edges = FALSE, sites = FALSE) {
+plotVoronoiOnSphere <- function(
+    vor, colors = "palette", palette = "Rocket", edges = FALSE, sites = FALSE
+) {
   stopifnot(isBoolean(edges))
   stopifnot(isBoolean(sites))
   radius <- attr(vor, "radius")
   center <- attr(vor, "center")
+  if(identical(colors, "palette") && isString(palette)) {
+    palette <- hcl.colors(255L, "Rocket")
+  }
   for(i in seq_along(vor)) {
     vor_i <- vor[[i]]
     plotVoronoiCell(
       vor_i[["site"]], vor_i[["cell"]], vor_i[["mesh"]],
-      radius, center
+      radius, center, palette = palette
     )
     if(edges) {
       plotVoronoiEdges(vor_i[["cell"]], radius, center)
