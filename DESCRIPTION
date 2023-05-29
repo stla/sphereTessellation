@@ -18,6 +18,8 @@ LinkingTo:
     Rcpp,
     RcppCGAL,
     RcppEigen
-Suggests: cooltools
+Suggests: 
+    cooltools,
+    uniformly
 Encoding: UTF-8
 RoxygenNote: 7.2.3
