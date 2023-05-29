@@ -23,10 +23,11 @@ Rcpp::List delaunay_cpp(
   {
     int i = 0;
     for(const auto& pt : points) {
-      Traits::Point_on_sphere_2 p = projection(pt);
-      DToS::Vertex_handle vh = dtos.insert(p);
+      Traits::Point_on_sphere_2 pos = projection(pt);
+      DToS::Vertex_handle vh = dtos.insert(pos);
+      SPoint3 p = pos.get_projection(ball.center(), ball.radius());
       Rcpp::NumericVector v_i = {p.x(), p.y(), p.z()};
-      Vertices(Rcpp::_, i++) = v_i / radius;
+      Vertices(Rcpp::_, i++) = v_i;
       int& index = vh->info();
       index = i;
     }
