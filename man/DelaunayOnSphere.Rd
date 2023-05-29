@@ -7,16 +7,19 @@
 DelaunayOnSphere(vertices, radius = 1, center = c(0, 0, 0), iterations = 5)
 }
 \arguments{
-\item{vertices}{vertices, xxx}
+\item{vertices}{vertices, a numeric matrix with three columns}
 
-\item{radius}{radius of the sphere}
+\item{radius}{radius of the sphere, a positive number; the vertices will
+be projected on this sphere}
 
-\item{center}{center of the sphere}
+\item{center}{center of the sphere, a numeric vector of length three; the
+vertices will be projected on this sphere}
 
-\item{iterations}{xxx}
+\item{iterations}{positive integer, the number of iterations used to
+construct the meshes of the spherical faces}
 }
 \value{
-A list with xxx
+A named list with four fields: xxx
 }
 \description{
 Computes a spherical Delaunay triangulation.

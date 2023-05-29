@@ -1,12 +1,15 @@
 #' @title Spherical Delaunay triangulation
 #' @description Computes a spherical Delaunay triangulation.
 #'
-#' @param vertices vertices, xxx
-#' @param radius radius of the sphere
-#' @param center center of the sphere
-#' @param iterations xxx
+#' @param vertices vertices, a numeric matrix with three columns
+#' @param radius radius of the sphere, a positive number; the vertices will
+#'   be projected on this sphere
+#' @param center center of the sphere, a numeric vector of length three; the
+#'   vertices will be projected on this sphere
+#' @param iterations positive integer, the number of iterations used to
+#'   construct the meshes of the spherical faces
 #'
-#' @return A list with xxx
+#' @return A named list with four fields: xxx
 #' @export
 #'
 #' @details xxx
@@ -16,10 +19,18 @@
 #' @examples
 #' library(sphereTessellation)
 DelaunayOnSphere <- function(
-    vertices, radius = 1, center = c(0, 0, 0), iterations = 5
+    vertices, radius = 1, center = c(0, 0, 0), iterations = 5L
 ) {
+  stopifnot(is.matrix(vertices), ncol(vertices) == 3L, is.numeric(vertices))
+  if(anyNA(vertices)) {
+    stop("Found missing values in the `vertices` matrix.")
+  }
+  storage.mode(vertices) <- "double"
+  stopifnot(isPositiveNumber(radius))
+  stopifnot(isVector3(center))
+  stopifnot(isStrictPositiveInteger(iterations))
   del <- delaunay_cpp(
-    t(vertices), radius, center, as.integer(iterations)
+    t(vertices), as.double(radius), as.double(center), as.integer(iterations)
   )
   attr(del, "radius") <- radius
   attr(del, "center") <- center
