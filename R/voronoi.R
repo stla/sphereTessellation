@@ -94,6 +94,13 @@ plotVoronoiEdges <- function(cell, radius, center) {
 #'
 #' @examples
 #' library(sphereTessellation)
+#' library(rgl)
+#'
+#' vertices <- t(cuboctahedron3d()$vb[-4L, ])
+#' vor <- VoronoiOnSphere(vertices)
+#'
+#' open3d(windowRect = 50 + c(0, 0, 512, 512), zoom = 0.8)
+#' plotVoronoiOnSphere(vor)
 plotVoronoiOnSphere <- function(
     vor, colors = "palette", palette = "Rocket", edges = FALSE, sites = FALSE
 ) {
@@ -102,7 +109,7 @@ plotVoronoiOnSphere <- function(
   radius <- attr(vor, "radius")
   center <- attr(vor, "center")
   if(identical(colors, "palette") && isString(palette)) {
-    palette <- hcl.colors(255L, "Rocket")
+    palette <- hcl.colors(255L, palette = palette)
   }
   for(i in seq_along(vor)) {
     vor_i <- vor[[i]]
