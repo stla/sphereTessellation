@@ -10,9 +10,11 @@ License: GPL-3
 URL: https://github.com/stla/sphereTessellation
 BugReports: https://github.com/stla/sphereTessellation/issues
 Imports: 
+    grDevices,
     randomcoloR,
     Rcpp,
-    rgl
+    rgl,
+    s2
 LinkingTo: 
     BH,
     Rcpp,
