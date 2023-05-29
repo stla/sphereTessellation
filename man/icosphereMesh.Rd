@@ -22,6 +22,7 @@ Returns the mesh of an icosphere.
 }
 \examples{
 library(sphereTessellation)
+library(rgl)
 mesh <- icosphereMesh()
 open3d(windowRect = 50 + c(0, 0, 512, 512))
 shade3d(mesh, color = "navy")

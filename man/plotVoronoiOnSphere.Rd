@@ -6,7 +6,7 @@
 \usage{
 plotVoronoiOnSphere(
   vor,
-  colors = "palette",
+  colors = "gradient",
   palette = "Rocket",
   edges = FALSE,
   sites = FALSE
