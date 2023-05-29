@@ -26,7 +26,7 @@ Rcpp::List delaunay_cpp(
       Traits::Point_on_sphere_2 p = projection(pt);
       DToS::Vertex_handle vh = dtos.insert(p);
       Rcpp::NumericVector v_i = {p.x(), p.y(), p.z()};
-      Vertices(Rcpp::_, i++) = v_i;
+      Vertices(Rcpp::_, i++) = v_i / radius;
       int& index = vh->info();
       index = i;
     }
