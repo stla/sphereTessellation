@@ -17,7 +17,10 @@ plotVoronoiOnSphere(
 
 \item{colors}{xxx}
 
-\item{palette}{xxx}
+\item{palette}{this argument is used only when \code{colors="gradient"}; it
+can be either a character vector of colors, or the name of a palette
+which will be passed to the \code{palette} argument of the function
+\code{\link[grDevices]{hcl.colors}}}
 
 \item{edges}{Boolean, whether to plot the edges}
 

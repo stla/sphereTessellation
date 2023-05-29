@@ -84,7 +84,10 @@ plotVoronoiEdges <- function(cell, radius, center) {
 #'
 #' @param vor an output of \code{\link{VoronoiOnSphere}}
 #' @param colors xxx
-#' @param palette xxx
+#' @param palette this argument is used only when \code{colors="gradient"}; it
+#'   can be either a character vector of colors, or the name of a palette
+#'   which will be passed to the \code{palette} argument of the function
+#'   \code{\link[grDevices]{hcl.colors}}
 #' @param edges Boolean, whether to plot the edges
 #' @param sites Boolean, whether to plot the Voronoï sites
 #'
@@ -104,13 +107,13 @@ plotVoronoiEdges <- function(cell, radius, center) {
 #' open3d(windowRect = 50 + c(0, 0, 512, 512), zoom = 0.8)
 #' plotVoronoiOnSphere(vor)
 plotVoronoiOnSphere <- function(
-    vor, colors = "palette", palette = "Rocket", edges = FALSE, sites = FALSE
+    vor, colors = "gradient", palette = "Rocket", edges = FALSE, sites = FALSE
 ) {
   stopifnot(isBoolean(edges))
   stopifnot(isBoolean(sites))
   radius <- attr(vor, "radius")
   center <- attr(vor, "center")
-  if(identical(colors, "palette") && isString(palette)) {
+  if(identical(colors, "gradient") && isString(palette)) {
     palette <- hcl.colors(255L, palette = palette)
   }
   for(i in seq_along(vor)) {
