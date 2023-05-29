@@ -83,6 +83,8 @@ plotVoronoiEdges <- function(cell, radius, center) {
 #' @description Plot a spherical Voronoï tessellation.
 #'
 #' @param vor an output of \code{\link{VoronoiOnSphere}}
+#' @param colors xxx
+#' @param palette xxx
 #' @param edges Boolean, whether to plot the edges
 #' @param sites Boolean, whether to plot the Voronoï sites
 #'

@@ -15,6 +15,10 @@ plotVoronoiOnSphere(
 \arguments{
 \item{vor}{an output of \code{\link{VoronoiOnSphere}}}
 
+\item{colors}{xxx}
+
+\item{palette}{xxx}
+
 \item{edges}{Boolean, whether to plot the edges}
 
 \item{sites}{Boolean, whether to plot the Voronoï sites}
