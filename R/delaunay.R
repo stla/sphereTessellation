@@ -1,15 +1,24 @@
-library(sphereTessellation)
-library(rgl)
-library(randomcoloR)
-library(cooltools)
-
+#' @title Spherical Delaunay triangulation
+#' @description Computes a spherical Delaunay triangulation.
+#'
+#' @param vertices vertices, xxx
+#' @param radius radius of the sphere
+#' @param center center of the sphere
+#' @param iterations xxx
+#'
+#' @return A list with xxx
+#' @export
+#'
+#' @details xxx
+#'
+#' @seealso \code{\link{plotDelaunayOnSphere}}
+#'
+#' @examples
+#' library(sphereTessellation)
 DelaunayOnSphere <- function(
     vertices, radius = 1, center = c(0, 0, 0), iterations = 5
 ) {
-  stopifnot(isPositiveNumber(radius))
-  stopifnot(isVector3(center))
-  stopifnot(isStrictPositiveInteger(iterations))
-  del <- sphereTessellation:::delaunay_cpp(
+  del <- delaunay_cpp(
     t(vertices), radius, center, as.integer(iterations)
   )
   attr(del, "radius") <- radius
@@ -17,6 +26,8 @@ DelaunayOnSphere <- function(
   del
 }
 
+#' @importFrom rgl tmesh3d shade3d
+#' @noRd
 plotDelaunayFace <- function(mesh, color) {
   rmesh <- tmesh3d(
     vertices = mesh[["vertices"]],
@@ -36,9 +47,26 @@ plotDelaunayEdges <- function(vertices, radius, center) {
   }
 }
 
+#' @title Plot spherical Delaunay triangulation
+#' @description Plot a spherical Delaunay triangulation.
+#'
+#' @param del an output of \code{\link{DelaunayOnSphere}}
+#' @param colors xxx
+#' @param edges Boolean, whether to plot the edges
+#' @param vertices Boolean, whether to plot the vertices
+#'
+#' @return No value is returned.
+#' @export
+#' @importFrom randomcoloR randomColor
+#' @importFrom rgl spheres3d
+#'
+#' @examples
+#' library(sphereTessellation)
 plotDelaunayOnSphere <- function(
     del, colors = "random", edges = FALSE, vertices = FALSE
 ) {
+  stopifnot(isBoolean(edges))
+  stopifnot(isBoolean(vertices))
   radius <- attr(del, "radius")
   center <- attr(del, "center")
   Vertices   <- del[["vertices"]]
@@ -62,15 +90,3 @@ plotDelaunayOnSphere <- function(
     spheres3d(Vertices, radius = radius/50, color = "navy")
   }
 }
-
-
-vertices <- fibonaccisphere(50)
-del <- DelaunayOnSphere(vertices)
-
-
-open3d(windowRect = 50 + c(0, 0, 512, 512))
-view3d(0, 0, zoom = 0.7)
-clear3d(type = "lights")
-light3d(x = -50, y = 100, z = 100, ambient = "white")
-plotDelaunayOnSphere(del, edges = TRUE, vertices = TRUE)
-
