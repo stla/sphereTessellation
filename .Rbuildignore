@@ -1,5 +1,6 @@
 ^sphereTessellation\.Rproj$
 ^\.Rproj\.user$
+^inst/gifs$
 ^inst/essais$
 ^inst/oldcpp$
 ^inst/trash$
