@@ -3,3 +3,4 @@
 ^inst/essais$
 ^inst/oldcpp$
 ^inst/trash$
+^\.github$
