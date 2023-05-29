@@ -4,7 +4,7 @@
 \alias{VoronoiOnSphere}
 \title{Spherical Voronoï tessellation}
 \usage{
-VoronoiOnSphere(vertices, radius = 1, center = c(0, 0, 0), iterations = 5)
+VoronoiOnSphere(vertices, radius = 1, center = c(0, 0, 0), iterations = 5L)
 }
 \arguments{
 \item{vertices}{vertices, a numeric matrix with three columns}
@@ -30,6 +30,14 @@ xxx
 }
 \examples{
 library(sphereTessellation)
+library(rgl)
+if(require(cooltools)) {
+set.seed(421L)
+vertices <- fibonaccisphere(15L)
+vor <- VoronoiOnSphere(vertices)
+open3d(windowRect = 50 + c(0, 0, 512, 512), zoom = 0.8)
+plotVoronoiOnSphere(vor)
+}
 }
 \seealso{
 \code{\link{plotVoronoiOnSphere}}

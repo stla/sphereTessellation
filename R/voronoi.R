@@ -19,6 +19,14 @@
 #'
 #' @examples
 #' library(sphereTessellation)
+#' library(rgl)
+#' if(require(cooltools)) {
+#' set.seed(421L)
+#' vertices <- fibonaccisphere(15L)
+#' vor <- VoronoiOnSphere(vertices)
+#' open3d(windowRect = 50 + c(0, 0, 512, 512), zoom = 0.8)
+#' plotVoronoiOnSphere(vor)
+#' }
 VoronoiOnSphere <- function(
     vertices, radius = 1, center = c(0, 0, 0), iterations = 5L
 ) {

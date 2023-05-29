@@ -4,7 +4,7 @@
 \alias{DelaunayOnSphere}
 \title{Spherical Delaunay triangulation}
 \usage{
-DelaunayOnSphere(vertices, radius = 1, center = c(0, 0, 0), iterations = 5)
+DelaunayOnSphere(vertices, radius = 1, center = c(0, 0, 0), iterations = 5L)
 }
 \arguments{
 \item{vertices}{vertices, a numeric matrix with three columns}
@@ -29,6 +29,25 @@ xxx
 }
 \examples{
 library(sphereTessellation)
+library(rgl)
+
+if(require(cooltools)) {
+set.seed(421L)
+vertices <- fibonaccisphere(15L)
+del <- DelaunayOnSphere(vertices)
+open3d(windowRect = 50 + c(0, 0, 512, 512), zoom = 0.8)
+plotDelaunayOnSphere(del)
+}
+
+if(require(uniformly)) {
+# sample vertices on a hemisphere, so there will be some ghost faces
+set.seed(421L)
+vertices <- rphong_on_hemisphere(7L)
+del <- DelaunayOnSphere(vertices)
+# the ghost faces are not plotted
+open3d(windowRect = 50 + c(0, 0, 512, 512), zoom = 0.8)
+plotDelaunayOnSphere(del)
+}
 }
 \seealso{
 \code{\link{plotDelaunayOnSphere}}
