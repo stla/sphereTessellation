@@ -35,8 +35,7 @@
 #' library(rgl)
 #'
 #' if(require(cooltools)) {
-#' set.seed(421L)
-#' vertices <- fibonaccisphere(15L)
+#' vertices <- fibonaccisphere(8L)
 #' del <- DelaunayOnSphere(vertices)
 #' open3d(windowRect = 50 + c(0, 0, 512, 512), zoom = 0.8)
 #' plotDelaunayOnSphere(del)
@@ -45,7 +44,7 @@
 #' if(require(uniformly)) {
 #' # sample vertices on a hemisphere, so there will be some ghost faces
 #' set.seed(421L)
-#' vertices <- rphong_on_hemisphere(7L)
+#' vertices <- rphong_on_hemisphere(6L)
 #' del <- DelaunayOnSphere(vertices)
 #' # the ghost faces are not plotted
 #' open3d(windowRect = 50 + c(0, 0, 512, 512), zoom = 0.8)

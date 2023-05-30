@@ -23,9 +23,7 @@ library(sphereTessellation)
 library(rgl)
 library(cooltools)
 
-#
-set.seed(421L)
-vertices <- fibonaccisphere(15L)
+vertices <- fibonaccisphere(8L)
 del <- DelaunayOnSphere(vertices)
 open3d(windowRect = 50 + c(0, 0, 512, 512), zoom = 0.8)
 plotDelaunayOnSphere(del)
