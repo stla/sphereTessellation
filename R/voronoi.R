@@ -34,10 +34,8 @@
 #' if(require(cooltools)) {
 #' vertices <- fibonaccisphere(150L)
 #' vor <- VoronoiOnSphere(vertices)
-#' \donttest{
-#' open3d(windowRect = 50 + c(0, 0, 512, 512), zoom = 0.8)
-#' plotVoronoiOnSphere(vor, colors = "random")
-#' }
+#' \donttest{open3d(windowRect = 50 + c(0, 0, 512, 512), zoom = 0.8)
+#' plotVoronoiOnSphere(vor, colors = "random")}
 #' }
 VoronoiOnSphere <- function(
     vertices, radius = 1, center = c(0, 0, 0), iterations = 5L
