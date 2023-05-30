@@ -5,3 +5,4 @@
 ^inst/oldcpp$
 ^inst/trash$
 ^\.github$
+^cran-comments\.md$
