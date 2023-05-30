@@ -11,7 +11,7 @@ plotDelaunayOnSphere(
   vertices = FALSE,
   hue = "random",
   luminosity = "bright",
-  lty = "solid",
+  ecolor = "black",
   lwd = 3,
   vcolor = "black",
   vradius = NA
@@ -33,14 +33,14 @@ multiple colors with \code{\link[randomcoloR]{randomColor}}, or
 \item{hue, luminosity}{if \code{colors = "random"}, these arguments are
 passed to \code{\link[randomcoloR]{randomColor}}}
 
+\item{ecolor}{a color for the edges}
+
 \item{lwd}{line width for the edges, if they are plotted}
 
 \item{vcolor}{a color for the vertices}
 
 \item{vradius}{a radius for the vertices, which are plotted as spheres (if
 they are plotted); \code{NA} for a default value}
-
-\item{ecolor}{a color for the edges}
 }
 \value{
 No value is returned.

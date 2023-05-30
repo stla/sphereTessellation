@@ -8,8 +8,15 @@ plotVoronoiOnSphere(
   vor,
   colors = "gradient",
   palette = "Rocket",
+  bias = 1,
   edges = FALSE,
-  sites = FALSE
+  sites = FALSE,
+  hue = "random",
+  luminosity = "bright",
+  ecolor = "black",
+  lwd = 3,
+  scolor = "black",
+  sradius = NA
 )
 }
 \arguments{
@@ -26,13 +33,13 @@ can be either a character vector of colors, or the name of a palette
 which will be passed to the \code{palette} argument of the function
 \code{\link[grDevices]{hcl.colors}}}
 
-\item{edges}{Boolean, whether to plot the edges}
-
-\item{sites}{Boolean, whether to plot the Voronoï sites}
-
 \item{bias}{this argument is used only when \code{colors="gradient"}; it
 is passed to the \code{bias} argument of the function
 \code{\link[grDevices]{colorRamp}}}
+
+\item{edges}{Boolean, whether to plot the edges}
+
+\item{sites}{Boolean, whether to plot the Voronoï sites}
 
 \item{hue, luminosity}{if \code{colors = "random"}, these arguments are
 passed to \code{\link[randomcoloR]{randomColor}}}
