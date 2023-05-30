@@ -14,7 +14,8 @@ plotDelaunayOnSphere(
   ecolor = "black",
   lwd = 3,
   vcolor = "black",
-  vradius = NA
+  vradius = NA,
+  ...
 )
 }
 \arguments{
@@ -41,6 +42,9 @@ passed to \code{\link[randomcoloR]{randomColor}}}
 
 \item{vradius}{a radius for the vertices, which are plotted as spheres (if
 they are plotted); \code{NA} for a default value}
+
+\item{...}{arguments passed to \code{\link[rgl]{shade3d}} to plot the
+spherical triangles}
 }
 \value{
 No value is returned.

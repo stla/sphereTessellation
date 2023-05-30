@@ -74,13 +74,13 @@ DelaunayOnSphere <- function(
 
 #' @importFrom rgl tmesh3d shade3d
 #' @noRd
-plotDelaunayFace <- function(mesh, color) {
+plotDelaunayFace <- function(mesh, color, ...) {
   rmesh <- tmesh3d(
     vertices = mesh[["vertices"]],
     indices  = mesh[["faces"]],
     normals  = t(mesh[["normals"]])
   )
-  shade3d(rmesh, color = color)
+  shade3d(rmesh, color = color, ...)
 }
 
 #' @importFrom rgl arc3d
@@ -111,6 +111,8 @@ plotDelaunayEdges <- function(vertices, radius, center, color, lwd) {
 #' @param vcolor a color for the vertices
 #' @param vradius a radius for the vertices, which are plotted as spheres (if
 #'   they are plotted); \code{NA} for a default value
+#' @param ... arguments passed to \code{\link[rgl]{shade3d}} to plot the
+#'   spherical triangles
 #'
 #' @return No value is returned.
 #' @export
@@ -129,7 +131,7 @@ plotDelaunayEdges <- function(vertices, radius, center, color, lwd) {
 plotDelaunayOnSphere <- function(
     del, colors = "random", edges = FALSE, vertices = FALSE,
     hue = "random", luminosity = "bright", ecolor = "black", lwd = 3,
-    vcolor = "black", vradius = NA
+    vcolor = "black", vradius = NA, ...
 ) {
   stopifnot(isBoolean(edges))
   stopifnot(isBoolean(vertices))
@@ -154,7 +156,7 @@ plotDelaunayOnSphere <- function(
   }
   for(i in seq_along(Meshes)) {
     plotDelaunayFace(
-      Meshes[[i]], colors[i]
+      Meshes[[i]], colors[i], ...
     )
     if(edges) {
       face <- Faces[i, ]

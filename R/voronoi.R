@@ -76,7 +76,7 @@ geodist <- function(A, B, radius, center) {
 #' @importFrom rgl tmesh3d shade3d
 #' @noRd
 plotVoronoiCell <- function(
-    site, cell, mesh, radius, center, palette, bias, color = NULL
+    site, cell, mesh, radius, center, palette, bias, color = NULL, ...
 ) {
 
   if(is.null(color)) {
@@ -96,14 +96,14 @@ plotVoronoiCell <- function(
       normals  = t(mesh[["normals"]]),
       material = list(color = colors)
     )
-    shade3d(rmesh, meshColor = "vertices", specular = "black")
+    shade3d(rmesh, meshColor = "vertices", ...)
   } else {
     rmesh <- tmesh3d(
       vertices = mesh[["vertices"]],
       indices  = mesh[["faces"]],
       normals  = t(mesh[["normals"]])
     )
-    shade3d(rmesh, color = color, specular = "black")
+    shade3d(rmesh, color = color, ...)
   }
 
 }
@@ -144,6 +144,8 @@ plotVoronoiEdges <- function(cell, radius, center, color, lwd) {
 #' @param scolor a color for the sites
 #' @param sradius a radius for the sites, which are plotted as spheres (if
 #'   they are plotted); \code{NA} for a default value
+#' @param ... arguments passed to \code{\link[rgl]{shade3d}} to plot the
+#'   spherical faces
 #'
 #' @return No value is returned.
 #'
@@ -161,13 +163,13 @@ plotVoronoiEdges <- function(cell, radius, center, color, lwd) {
 #' vor <- VoronoiOnSphere(vertices)
 #'
 #' open3d(windowRect = 50 + c(0, 0, 512, 512), zoom = 0.8)
-#' plotVoronoiOnSphere(vor)
+#' plotVoronoiOnSphere(vor, specular = "black")
 plotVoronoiOnSphere <- function(
     vor, colors = "gradient", palette = "Rocket", bias = 1,
     edges = FALSE, sites = FALSE,
     hue = "random", luminosity = "bright",
     ecolor = "black", lwd = 3,
-    scolor = "black", sradius = NA
+    scolor = "black", sradius = NA, ...
 ) {
   stopifnot(isBoolean(edges))
   stopifnot(isBoolean(sites))
@@ -195,7 +197,7 @@ plotVoronoiOnSphere <- function(
     vor_i <- vor[[i]]
     plotVoronoiCell(
       vor_i[["site"]], vor_i[["cell"]], vor_i[["mesh"]],
-      radius, center, palette, bias, colors[i]
+      radius, center, palette, bias, colors[i], ...
     )
     if(edges) {
       plotVoronoiEdges(vor_i[["cell"]], radius, center, ecolor, lwd)

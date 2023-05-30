@@ -16,7 +16,8 @@ plotVoronoiOnSphere(
   ecolor = "black",
   lwd = 3,
   scolor = "black",
-  sradius = NA
+  sradius = NA,
+  ...
 )
 }
 \arguments{
@@ -52,6 +53,9 @@ passed to \code{\link[randomcoloR]{randomColor}}}
 
 \item{sradius}{a radius for the sites, which are plotted as spheres (if
 they are plotted); \code{NA} for a default value}
+
+\item{...}{arguments passed to \code{\link[rgl]{shade3d}} to plot the
+spherical faces}
 }
 \value{
 No value is returned.
@@ -67,5 +71,5 @@ vertices <- t(cuboctahedron3d()$vb[-4L, ])
 vor <- VoronoiOnSphere(vertices)
 
 open3d(windowRect = 50 + c(0, 0, 512, 512), zoom = 0.8)
-plotVoronoiOnSphere(vor)
+plotVoronoiOnSphere(vor, specular = "black")
 }
