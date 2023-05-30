@@ -42,11 +42,10 @@ First the Delaunay triangulation is computed, then the Voronoï
 library(sphereTessellation)
 library(rgl)
 if(require(cooltools)) {
-set.seed(421L)
-vertices <- fibonaccisphere(15L)
+vertices <- fibonaccisphere(50L)
 vor <- VoronoiOnSphere(vertices)
 open3d(windowRect = 50 + c(0, 0, 512, 512), zoom = 0.8)
-plotVoronoiOnSphere(vor)
+plotVoronoiOnSphere(vor, colors = "random")
 }
 }
 \seealso{

@@ -32,11 +32,10 @@
 #' library(sphereTessellation)
 #' library(rgl)
 #' if(require(cooltools)) {
-#' set.seed(421L)
-#' vertices <- fibonaccisphere(15L)
+#' vertices <- fibonaccisphere(50L)
 #' vor <- VoronoiOnSphere(vertices)
 #' open3d(windowRect = 50 + c(0, 0, 512, 512), zoom = 0.8)
-#' plotVoronoiOnSphere(vor)
+#' plotVoronoiOnSphere(vor, colors = "random")
 #' }
 VoronoiOnSphere <- function(
     vertices, radius = 1, center = c(0, 0, 0), iterations = 5L
@@ -77,39 +76,46 @@ geodist <- function(A, B, radius, center) {
 #' @importFrom rgl tmesh3d shade3d
 #' @noRd
 plotVoronoiCell <- function(
-    site, cell, mesh, radius, center, palette, bias
+    site, cell, mesh, radius, center, palette, bias, color = NULL
 ) {
 
-  dists <- apply(cell, 2L, function(xyz) {
-    geodist(xyz, site, radius, center)
-  })
-  maxDist <- max(dists)
-
-  fcol <- colorRamp(palette, bias = bias, interpolate = "spline")
-
-  clr <- function(xyz) {
-    RGB <- fcol(min(1, geodist(xyz, site, radius, center) / maxDist))
-    rgb(RGB[1L, 1L], RGB[1L, 2L], RGB[1L, 3L], maxColorValue = 255)
+  if(is.null(color)) {
+    dists <- apply(cell, 2L, function(xyz) {
+      geodist(xyz, site, radius, center)
+    })
+    maxDist <- max(dists)
+    fcol <- colorRamp(palette, bias = bias, interpolate = "spline")
+    clr <- function(xyz) {
+      RGB <- fcol(min(1, geodist(xyz, site, radius, center) / maxDist))
+      rgb(RGB[1L, 1L], RGB[1L, 2L], RGB[1L, 3L], maxColorValue = 255)
+    }
+    colors <- c(apply(mesh[["vertices"]], 2L, clr))
+    rmesh <- tmesh3d(
+      vertices = mesh[["vertices"]],
+      indices  = mesh[["faces"]],
+      normals  = t(mesh[["normals"]]),
+      material = list(color = colors)
+    )
+    shade3d(rmesh, meshColor = "vertices", specular = "black")
+  } else {
+    rmesh <- tmesh3d(
+      vertices = mesh[["vertices"]],
+      indices  = mesh[["faces"]],
+      normals  = t(mesh[["normals"]])
+    )
+    shade3d(rmesh, color = color, specular = "black")
   }
 
-  colors <- c(apply(mesh[["vertices"]], 2L, clr))
-  rmesh <- tmesh3d(
-    vertices = mesh[["vertices"]],
-    indices  = mesh[["faces"]],
-    normals  = t(mesh[["normals"]]),
-    material = list(color = colors)
-  )
-  shade3d(rmesh, meshColor = "vertices", specular = "black")
 }
 
 #' @importFrom rgl arc3d
 #' @noRd
-plotVoronoiEdges <- function(cell, radius, center, lwd) {
+plotVoronoiEdges <- function(cell, radius, center, color, lwd) {
   cellsize <- ncol(cell)
   cell <- cbind(cell, cell[, 1L])
   for(i in 1L:cellsize) {
     arc3d(cell[, i], cell[, i+1L], center, radius, n = 50,
-          color = "white", lwd = lwd, depth_test = "lequal")
+          color = color, lwd = lwd, depth_test = "lequal")
   }
 }
 
@@ -177,7 +183,7 @@ plotVoronoiOnSphere <- function(
       colors <- randomColor(length(vor), hue = hue, luminosity = luminosity)
     } else if(colors == "distinct") {
       colors <- distinctColorPalette(length(vor))
-    } else{
+    } else {
       colors <- rep(colors, length(vor))
     }
   } else if(all(is.na(colors)) || is.null(colors)) {
@@ -189,7 +195,7 @@ plotVoronoiOnSphere <- function(
     vor_i <- vor[[i]]
     plotVoronoiCell(
       vor_i[["site"]], vor_i[["cell"]], vor_i[["mesh"]],
-      radius, center, palette, bias
+      radius, center, palette, bias, colors[i]
     )
     if(edges) {
       plotVoronoiEdges(vor_i[["cell"]], radius, center, ecolor, lwd)
