@@ -86,11 +86,11 @@ plotDelaunayFace <- function(mesh, color) {
 
 #' @importFrom rgl arc3d
 #' @noRd
-plotDelaunayEdges <- function(vertices, radius, center) {
+plotDelaunayEdges <- function(vertices, radius, center, color, lwd) {
   coords <- rbind(vertices, vertices[1L, ])
   for(i in 1L:3L) {
     arc3d(coords[i, ], coords[i+1L, ], center, radius, n = 50,
-          color = "black", lwd = 3, depth_test = "lequal")
+          color = color, lwd = lwd, depth_test = "lequal")
   }
 }
 
@@ -99,7 +99,7 @@ plotDelaunayEdges <- function(vertices, radius, center) {
 #'
 #' @param del an output of \code{\link{DelaunayOnSphere}}
 #' @param colors controls the filling colors of the triangles, either
-#'   \code{NULL} for no color, or a single color, or \code{"random"} to get
+#'   \code{NA} for no color, or a single color, or \code{"random"} to get
 #'   multiple colors with \code{\link[randomcoloR]{randomColor}}, or
 #'   \code{"distinct"} to get multiple colors with
 #'   \code{\link[randomcoloR]{distinctColorPalette}}
@@ -107,8 +107,8 @@ plotDelaunayEdges <- function(vertices, radius, center) {
 #' @param vertices Boolean, whether to plot the vertices
 #' @param hue,luminosity if \code{colors = "random"}, these arguments are
 #'   passed to \code{\link[randomcoloR]{randomColor}}
-#' @param lty,lwd graphical parameters for the edges which are not
-#'   border edges nor constraint edges
+#' @param ecolor a color for the edges
+#' @param lwd line width for the edges, if they are plotted
 #' @param vcolor a color for the vertices
 #' @param vradius a radius for the vertices, which are plotted as spheres (if
 #'   they are plotted); \code{NA} for a default value
@@ -129,7 +129,7 @@ plotDelaunayEdges <- function(vertices, radius, center) {
 #' plotDelaunayOnSphere(del)
 plotDelaunayOnSphere <- function(
     del, colors = "random", edges = FALSE, vertices = FALSE,
-    hue = "random", luminosity = "bright", lty = "solid", lwd = 3,
+    hue = "random", luminosity = "bright", ecolor = "black", lwd = 3,
     vcolor = "black", vradius = NA
 ) {
   stopifnot(isBoolean(edges))
@@ -142,12 +142,14 @@ plotDelaunayOnSphere <- function(
   Faces      <- del[["faces"]][solidFaces, ]
   if(isString(colors)) {
     if(colors == "random") {
-      colors <- randomColor(nrow(Faces), hue = hue, luminosity = luminosity)
+      colors <- randomColor(length(Meshes), hue = hue, luminosity = luminosity)
     } else if(colors == "distinct") {
       colors <- distinctColorPalette(length(Meshes))
     } else{
       colors <- rep(colors, length(Meshes))
     }
+  } else if(all(is.na(colors)) || is.null(colors)) {
+    colors <- rep(NA, length(Meshes))
   } else if(!isStringVector(colors)) {
     stop("Invalid `colors` argument.")
   }
@@ -158,7 +160,7 @@ plotDelaunayOnSphere <- function(
     if(edges) {
       face <- Faces[i, ]
       verts <- Vertices[face, ]
-      plotDelaunayEdges(verts, radius, center)
+      plotDelaunayEdges(verts, radius, center, ecolor, lwd)
     }
   }
   if(vertices) {

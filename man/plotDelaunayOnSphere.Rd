@@ -4,13 +4,24 @@
 \alias{plotDelaunayOnSphere}
 \title{Plot spherical Delaunay triangulation}
 \usage{
-plotDelaunayOnSphere(del, colors = "random", edges = FALSE, vertices = FALSE)
+plotDelaunayOnSphere(
+  del,
+  colors = "random",
+  edges = FALSE,
+  vertices = FALSE,
+  hue = "random",
+  luminosity = "bright",
+  lty = "solid",
+  lwd = 3,
+  vcolor = "black",
+  vradius = NA
+)
 }
 \arguments{
 \item{del}{an output of \code{\link{DelaunayOnSphere}}}
 
 \item{colors}{controls the filling colors of the triangles, either
-\code{NULL} for no color, or a single color, or \code{"random"} to get
+\code{NA} for no color, or a single color, or \code{"random"} to get
 multiple colors with \code{\link[randomcoloR]{randomColor}}, or
 \code{"distinct"} to get multiple colors with
 \code{\link[randomcoloR]{distinctColorPalette}}}
@@ -22,13 +33,14 @@ multiple colors with \code{\link[randomcoloR]{randomColor}}, or
 \item{hue, luminosity}{if \code{colors = "random"}, these arguments are
 passed to \code{\link[randomcoloR]{randomColor}}}
 
-\item{lty, lwd}{graphical parameters for the edges which are not
-border edges nor constraint edges}
+\item{lwd}{line width for the edges, if they are plotted}
 
 \item{vcolor}{a color for the vertices}
 
 \item{vradius}{a radius for the vertices, which are plotted as spheres (if
 they are plotted); \code{NA} for a default value}
+
+\item{ecolor}{a color for the edges}
 }
 \value{
 No value is returned.

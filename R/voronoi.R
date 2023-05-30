@@ -77,7 +77,7 @@ geodist <- function(A, B, radius, center) {
 #' @importFrom rgl tmesh3d shade3d
 #' @noRd
 plotVoronoiCell <- function(
-    site, cell, mesh, radius, center, palette
+    site, cell, mesh, radius, center, palette, bias
 ) {
 
   dists <- apply(cell, 2L, function(xyz) {
@@ -85,7 +85,7 @@ plotVoronoiCell <- function(
   })
   maxDist <- max(dists)
 
-  fcol <- colorRamp(palette, bias = 1, interpolate = "spline")
+  fcol <- colorRamp(palette, bias = bias, interpolate = "spline")
 
   clr <- function(xyz) {
     RGB <- fcol(min(1, geodist(xyz, site, radius, center) / maxDist))
@@ -104,12 +104,12 @@ plotVoronoiCell <- function(
 
 #' @importFrom rgl arc3d
 #' @noRd
-plotVoronoiEdges <- function(cell, radius, center) {
+plotVoronoiEdges <- function(cell, radius, center, lwd) {
   cellsize <- ncol(cell)
   cell <- cbind(cell, cell[, 1L])
   for(i in 1L:cellsize) {
     arc3d(cell[, i], cell[, i+1L], center, radius, n = 50,
-          color = "white", lwd = 3, depth_test = "lequal")
+          color = "white", lwd = lwd, depth_test = "lequal")
   }
 }
 
@@ -117,13 +117,27 @@ plotVoronoiEdges <- function(cell, radius, center) {
 #' @description Plot a spherical Voronoï tessellation.
 #'
 #' @param vor an output of \code{\link{VoronoiOnSphere}}
-#' @param colors xxx
+#' @param colors controls the filling colors of the triangles, either
+#'   \code{NA} for no color, or a single color, or \code{"random"} to get
+#'   multiple colors with \code{\link[randomcoloR]{randomColor}}, or
+#'   \code{"distinct"} to get multiple colors with
+#'   \code{\link[randomcoloR]{distinctColorPalette}}
 #' @param palette this argument is used only when \code{colors="gradient"}; it
 #'   can be either a character vector of colors, or the name of a palette
 #'   which will be passed to the \code{palette} argument of the function
 #'   \code{\link[grDevices]{hcl.colors}}
+#' @param bias this argument is used only when \code{colors="gradient"}; it
+#'   is passed to the \code{bias} argument of the function
+#'   \code{\link[grDevices]{colorRamp}}
 #' @param edges Boolean, whether to plot the edges
 #' @param sites Boolean, whether to plot the Voronoï sites
+#' @param hue,luminosity if \code{colors = "random"}, these arguments are
+#'   passed to \code{\link[randomcoloR]{randomColor}}
+#' @param ecolor a color for the edges
+#' @param lwd graphical parameter for the edges, if they are plotted
+#' @param scolor a color for the sites
+#' @param sradius a radius for the sites, which are plotted as spheres (if
+#'   they are plotted); \code{NA} for a default value
 #'
 #' @return No value is returned.
 #'
@@ -143,26 +157,50 @@ plotVoronoiEdges <- function(cell, radius, center) {
 #' open3d(windowRect = 50 + c(0, 0, 512, 512), zoom = 0.8)
 #' plotVoronoiOnSphere(vor)
 plotVoronoiOnSphere <- function(
-    vor, colors = "gradient", palette = "Rocket", edges = FALSE, sites = FALSE
+    vor, colors = "gradient", palette = "Rocket", bias = 1,
+    edges = FALSE, sites = FALSE,
+    hue = "random", luminosity = "bright",
+    ecolor = "black", lwd = 3,
+    scolor = "black", sradius = NA
 ) {
   stopifnot(isBoolean(edges))
   stopifnot(isBoolean(sites))
   radius <- attr(vor, "radius")
   center <- attr(vor, "center")
-  if(identical(colors, "gradient") && isString(palette)) {
-    palette <- hcl.colors(255L, palette = palette)
+  if(isString(colors)) {
+    if(colors == "gradient") {
+      colors <- rep(NA, length(vor))
+      if(isString(palette)) {
+        palette <- hcl.colors(255L, palette = palette)
+      }
+    } else if(colors == "random") {
+      colors <- randomColor(length(vor), hue = hue, luminosity = luminosity)
+    } else if(colors == "distinct") {
+      colors <- distinctColorPalette(length(vor))
+    } else{
+      colors <- rep(colors, length(vor))
+    }
+  } else if(all(is.na(colors)) || is.null(colors)) {
+    colors <- rep(NA, length(vor))
+  } else if(!isStringVector(colors)) {
+    stop("Invalid `colors` argument.")
   }
   for(i in seq_along(vor)) {
     vor_i <- vor[[i]]
     plotVoronoiCell(
       vor_i[["site"]], vor_i[["cell"]], vor_i[["mesh"]],
-      radius, center, palette = palette
+      radius, center, palette, bias
     )
     if(edges) {
-      plotVoronoiEdges(vor_i[["cell"]], radius, center)
+      plotVoronoiEdges(vor_i[["cell"]], radius, center, ecolor, lwd)
     }
     if(sites) {
-      spheres3d(rbind(vor_i[["site"]]), radius = radius/50, color = "navy")
+      if(is.na(sradius)) {
+        sradius <- radius / 50
+      } else {
+        stopifnot(isPositiveNumber(sradius))
+      }
+      spheres3d(rbind(vor_i[["site"]]), radius = sradius, color = scolor)
     }
   }
 }

@@ -15,7 +15,11 @@ plotVoronoiOnSphere(
 \arguments{
 \item{vor}{an output of \code{\link{VoronoiOnSphere}}}
 
-\item{colors}{xxx}
+\item{colors}{controls the filling colors of the triangles, either
+\code{NA} for no color, or a single color, or \code{"random"} to get
+multiple colors with \code{\link[randomcoloR]{randomColor}}, or
+\code{"distinct"} to get multiple colors with
+\code{\link[randomcoloR]{distinctColorPalette}}}
 
 \item{palette}{this argument is used only when \code{colors="gradient"}; it
 can be either a character vector of colors, or the name of a palette
@@ -25,6 +29,22 @@ which will be passed to the \code{palette} argument of the function
 \item{edges}{Boolean, whether to plot the edges}
 
 \item{sites}{Boolean, whether to plot the Voronoï sites}
+
+\item{bias}{this argument is used only when \code{colors="gradient"}; it
+is passed to the \code{bias} argument of the function
+\code{\link[grDevices]{colorRamp}}}
+
+\item{hue, luminosity}{if \code{colors = "random"}, these arguments are
+passed to \code{\link[randomcoloR]{randomColor}}}
+
+\item{ecolor}{a color for the edges}
+
+\item{lwd}{graphical parameter for the edges, if they are plotted}
+
+\item{scolor}{a color for the sites}
+
+\item{sradius}{a radius for the sites, which are plotted as spheres (if
+they are plotted); \code{NA} for a default value}
 }
 \value{
 No value is returned.
