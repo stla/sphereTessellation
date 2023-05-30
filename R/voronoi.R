@@ -166,8 +166,7 @@ plotVoronoiEdges <- function(cell, radius, center, color, lwd) {
 #' plotVoronoiOnSphere(vor, specular = "black", edges = TRUE)
 #'
 #' # effect of the `bias` argument ###
-#' \donttest{
-#' library(sphereTessellation)
+#' \donttest{library(sphereTessellation)
 #' library(rgl)
 #' vertices <- t(cuboctahedron3d()$vb[-4L, ])
 #' vor <- VoronoiOnSphere(vertices)
@@ -177,8 +176,7 @@ plotVoronoiEdges <- function(cell, radius, center, color, lwd) {
 #' next3d()
 #' plotVoronoiOnSphere(vor, palette = "Viridis", bias = 0.8)
 #' next3d()
-#' plotVoronoiOnSphere(vor, palette = "Viridis", bias = 1.1)
-#' }
+#' plotVoronoiOnSphere(vor, palette = "Viridis", bias = 1.1)}
 plotVoronoiOnSphere <- function(
     vor, colors = "gradient", palette = "Rocket", bias = 1,
     edges = FALSE, sites = FALSE,
