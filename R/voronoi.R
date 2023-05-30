@@ -76,10 +76,10 @@ geodist <- function(A, B, radius, center) {
 #' @importFrom rgl tmesh3d shade3d
 #' @noRd
 plotVoronoiCell <- function(
-    site, cell, mesh, radius, center, palette, bias, color = NULL, ...
+    site, cell, mesh, radius, center, palette, bias, color, ...
 ) {
 
-  if(is.null(color)) {
+  if(is.na(color)) {
     dists <- apply(cell, 2L, function(xyz) {
       geodist(xyz, site, radius, center)
     })
@@ -158,12 +158,27 @@ plotVoronoiEdges <- function(cell, radius, center, color, lwd) {
 #' @examples
 #' library(sphereTessellation)
 #' library(rgl)
-#'
+#' # take the vertices of the cuboctahedron and Voronoïze
 #' vertices <- t(cuboctahedron3d()$vb[-4L, ])
 #' vor <- VoronoiOnSphere(vertices)
-#'
+#' # plot
 #' open3d(windowRect = 50 + c(0, 0, 512, 512), zoom = 0.8)
-#' plotVoronoiOnSphere(vor, specular = "black")
+#' plotVoronoiOnSphere(vor, specular = "black", edges = TRUE)
+#'
+#' # effect of the `bias` argument ###
+#' \donttest{
+#' library(sphereTessellation)
+#' library(rgl)
+#' vertices <- t(cuboctahedron3d()$vb[-4L, ])
+#' vor <- VoronoiOnSphere(vertices)
+#' open3d(windowRect = 50 + c(0, 0, 900, 300), zoom = 0.8)
+#' mfrow3d(1, 3)
+#' plotVoronoiOnSphere(vor, palette = "Viridis", bias = 0.5)
+#' next3d()
+#' plotVoronoiOnSphere(vor, palette = "Viridis", bias = 0.8)
+#' next3d()
+#' plotVoronoiOnSphere(vor, palette = "Viridis", bias = 1.1)
+#' }
 plotVoronoiOnSphere <- function(
     vor, colors = "gradient", palette = "Rocket", bias = 1,
     edges = FALSE, sites = FALSE,
