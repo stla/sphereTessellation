@@ -129,6 +129,8 @@ plotVoronoiEdges <- function(cell, radius, center) {
 #'
 #' @importFrom rgl spheres3d
 #' @importFrom grDevices hcl.colors
+#' @importFrom randomcoloR randomColor distinctColorPalette
+#'
 #' @export
 #'
 #' @examples

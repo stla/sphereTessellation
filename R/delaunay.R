@@ -98,13 +98,24 @@ plotDelaunayEdges <- function(vertices, radius, center) {
 #' @description Plot a spherical Delaunay triangulation.
 #'
 #' @param del an output of \code{\link{DelaunayOnSphere}}
-#' @param colors xxx
+#' @param colors controls the filling colors of the triangles, either
+#'   \code{NULL} for no color, or a single color, or \code{"random"} to get
+#'   multiple colors with \code{\link[randomcoloR]{randomColor}}, or
+#'   \code{"distinct"} to get multiple colors with
+#'   \code{\link[randomcoloR]{distinctColorPalette}}
 #' @param edges Boolean, whether to plot the edges
 #' @param vertices Boolean, whether to plot the vertices
+#' @param hue,luminosity if \code{colors = "random"}, these arguments are
+#'   passed to \code{\link[randomcoloR]{randomColor}}
+#' @param lty,lwd graphical parameters for the edges which are not
+#'   border edges nor constraint edges
+#' @param vcolor a color for the vertices
+#' @param vradius a radius for the vertices, which are plotted as spheres (if
+#'   they are plotted); \code{NA} for a default value
 #'
 #' @return No value is returned.
 #' @export
-#' @importFrom randomcoloR randomColor
+#' @importFrom randomcoloR randomColor distinctColorPalette
 #' @importFrom rgl spheres3d
 #'
 #' @examples
@@ -117,7 +128,9 @@ plotDelaunayEdges <- function(vertices, radius, center) {
 #' open3d(windowRect = 50 + c(0, 0, 512, 512), zoom = 0.8)
 #' plotDelaunayOnSphere(del)
 plotDelaunayOnSphere <- function(
-    del, colors = "random", edges = FALSE, vertices = FALSE
+    del, colors = "random", edges = FALSE, vertices = FALSE,
+    hue = "random", luminosity = "bright", lty = "solid", lwd = 3,
+    vcolor = "black", vradius = NA
 ) {
   stopifnot(isBoolean(edges))
   stopifnot(isBoolean(vertices))
@@ -127,8 +140,16 @@ plotDelaunayOnSphere <- function(
   Meshes     <- del[["meshes"]]
   solidFaces <- del[["solidFaces"]]
   Faces      <- del[["faces"]][solidFaces, ]
-  if(identical(colors, "random")) {
-    colors <- randomColor(nrow(Faces), hue = "random", luminosity = "dark")
+  if(isString(colors)) {
+    if(colors == "random") {
+      colors <- randomColor(nrow(Faces), hue = hue, luminosity = luminosity)
+    } else if(colors == "distinct") {
+      colors <- distinctColorPalette(length(Meshes))
+    } else{
+      colors <- rep(colors, length(Meshes))
+    }
+  } else if(!isStringVector(colors)) {
+    stop("Invalid `colors` argument.")
   }
   for(i in seq_along(Meshes)) {
     plotDelaunayFace(
@@ -141,6 +162,11 @@ plotDelaunayOnSphere <- function(
     }
   }
   if(vertices) {
-    spheres3d(Vertices, radius = radius/50, color = "navy")
+    if(is.na(vradius)) {
+      vradius <- radius / 50
+    } else {
+      stopifnot(isPositiveNumber(vradius))
+    }
+    spheres3d(Vertices, radius = vradius, color = vcolor)
   }
 }

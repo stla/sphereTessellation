@@ -9,11 +9,26 @@ plotDelaunayOnSphere(del, colors = "random", edges = FALSE, vertices = FALSE)
 \arguments{
 \item{del}{an output of \code{\link{DelaunayOnSphere}}}
 
-\item{colors}{xxx}
+\item{colors}{controls the filling colors of the triangles, either
+\code{NULL} for no color, or a single color, or \code{"random"} to get
+multiple colors with \code{\link[randomcoloR]{randomColor}}, or
+\code{"distinct"} to get multiple colors with
+\code{\link[randomcoloR]{distinctColorPalette}}}
 
 \item{edges}{Boolean, whether to plot the edges}
 
 \item{vertices}{Boolean, whether to plot the vertices}
+
+\item{hue, luminosity}{if \code{colors = "random"}, these arguments are
+passed to \code{\link[randomcoloR]{randomColor}}}
+
+\item{lty, lwd}{graphical parameters for the edges which are not
+border edges nor constraint edges}
+
+\item{vcolor}{a color for the vertices}
+
+\item{vradius}{a radius for the vertices, which are plotted as spheres (if
+they are plotted); \code{NA} for a default value}
 }
 \value{
 No value is returned.
