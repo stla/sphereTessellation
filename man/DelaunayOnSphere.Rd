@@ -19,13 +19,26 @@ vertices will be projected on this sphere}
 construct the meshes of the spherical faces}
 }
 \value{
-A named list with four fields: xxx
+A named list with four fields:
+ \itemize{
+   \item \code{vertices}, the matrix of vertices obtained by projecting the
+   original vertices to the sphere;
+
+   \item \code{faces}, an integer matrix providing by row the indices of
+   the faces of the triangulation;
+
+   \item \code{solidFaces}, an integer vector providing the indices of the
+   solid faces; faces are either solid faces or ghost faces, see details
+
+   \item \code{meshes}, a list of meshes of the solid faces used for
+   plotting in \code{\link{plotDelaunayOnSphere}}.
+ }
 }
 \description{
 Computes a spherical Delaunay triangulation.
 }
 \details{
-xxx
+See \href{https://doc.cgal.org/latest/Triangulation_on_sphere_2/index.html}{2D Triangulations on the Sphere}.
 }
 \examples{
 library(sphereTessellation)

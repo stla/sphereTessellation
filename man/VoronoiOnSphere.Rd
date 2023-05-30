@@ -19,14 +19,24 @@ vertices will be projected on this sphere}
 construct the meshes of the spherical faces}
 }
 \value{
-An unnamed list whose each element is a named list with three
-  fields: xxx
+An unnamed list whose each element corresponds to a Voronoï face and
+  is a named list with three fields:
+  \itemize{
+    \item \code{site}, the coordinates of the Voronoï site of the face;
+
+    \item \code{cell}, a numeric matrix providing the coordinates of the
+    vertices of the face;
+
+    \item \code{mesh}, a mesh of the face used for plotting in the function
+    \code{\link{plotVoronoiOnSphere}}.
+  }
 }
 \description{
 Computes a spherical Voronoï tessellation.
 }
 \details{
-xxx
+First the Delaunay triangulation is computed, then the Voronoï
+  tessellation is obtained by duality.
 }
 \examples{
 library(sphereTessellation)

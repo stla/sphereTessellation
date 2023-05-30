@@ -9,10 +9,24 @@
 #' @param iterations positive integer, the number of iterations used to
 #'   construct the meshes of the spherical faces
 #'
-#' @return A named list with four fields: xxx
+#' @return A named list with four fields:
+#'  \itemize{
+#'    \item \code{vertices}, the matrix of vertices obtained by projecting the
+#'    original vertices to the sphere;
+#'
+#'    \item \code{faces}, an integer matrix providing by row the indices of
+#'    the faces of the triangulation;
+#'
+#'    \item \code{solidFaces}, an integer vector providing the indices of the
+#'    solid faces; faces are either solid faces or ghost faces, see details
+#'
+#'    \item \code{meshes}, a list of meshes of the solid faces used for
+#'    plotting in \code{\link{plotDelaunayOnSphere}}.
+#'  }
+#'
 #' @export
 #'
-#' @details xxx
+#' @details See \href{https://doc.cgal.org/latest/Triangulation_on_sphere_2/index.html}{2D Triangulations on the Sphere}.
 #'
 #' @seealso \code{\link{plotDelaunayOnSphere}}
 #'
@@ -41,10 +55,13 @@ DelaunayOnSphere <- function(
     vertices, radius = 1, center = c(0, 0, 0), iterations = 5L
 ) {
   stopifnot(is.matrix(vertices), ncol(vertices) == 3L, is.numeric(vertices))
+  storage.mode(vertices) <- "double"
   if(anyNA(vertices)) {
     stop("Found missing values in the `vertices` matrix.")
   }
-  storage.mode(vertices) <- "double"
+  if(anyDuplicated(vertices)) {
+    stop("Found duplicated rows in the `vertices` matrix.")
+  }
   stopifnot(isPositiveNumber(radius))
   stopifnot(isVector3(center))
   stopifnot(isStrictPositiveInteger(iterations))

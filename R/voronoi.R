@@ -9,11 +9,22 @@
 #' @param iterations positive integer, the number of iterations used to
 #'   construct the meshes of the spherical faces
 #'
-#' @return An unnamed list whose each element is a named list with three
-#'   fields: xxx
+#' @return An unnamed list whose each element corresponds to a Voronoï face and
+#'   is a named list with three fields:
+#'   \itemize{
+#'     \item \code{site}, the coordinates of the Voronoï site of the face;
+#'
+#'     \item \code{cell}, a numeric matrix providing the coordinates of the
+#'     vertices of the face;
+#'
+#'     \item \code{mesh}, a mesh of the face used for plotting in the function
+#'     \code{\link{plotVoronoiOnSphere}}.
+#'   }
+#'
 #' @export
 #'
-#' @details xxx
+#' @details First the Delaunay triangulation is computed, then the Voronoï
+#'   tessellation is obtained by duality.
 #'
 #' @seealso \code{\link{plotVoronoiOnSphere}}
 #'
@@ -31,10 +42,13 @@ VoronoiOnSphere <- function(
     vertices, radius = 1, center = c(0, 0, 0), iterations = 5L
 ) {
   stopifnot(is.matrix(vertices), ncol(vertices) == 3L, is.numeric(vertices))
+  storage.mode(vertices) <- "double"
   if(anyNA(vertices)) {
     stop("Found missing values in the `vertices` matrix.")
   }
-  storage.mode(vertices) <- "double"
+  if(anyDuplicated(vertices)) {
+    stop("Found duplicated rows in the `vertices` matrix.")
+  }
   stopifnot(isPositiveNumber(radius))
   stopifnot(isVector3(center))
   stopifnot(isStrictPositiveInteger(iterations))
