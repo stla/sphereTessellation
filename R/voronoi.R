@@ -60,16 +60,8 @@ VoronoiOnSphere <- function(
 }
 
 
-#' @importFrom s2 s2_distance s2_point
-#' @noRd
 geodist <- function(A, B, radius, center) {
-  A <- A - center
-  B <- B - center
-  s2_distance(
-    s2_point(A[1L], A[2L], A[3L]),
-    s2_point(B[1L], B[2L], B[3L]),
-    radius = radius
-  )
+  radius * acos(sum((A-center)*(B-center)) / (radius*radius))
 }
 
 #' @importFrom grDevices colorRamp rgb
