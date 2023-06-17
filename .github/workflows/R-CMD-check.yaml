@@ -40,7 +40,7 @@ jobs:
 
       - name: Download CGAL
         run: |
-          Rscript -e "RcppCGAL::cgal_install()"
+          Rscript -e "library(RcppCGAL)"
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
