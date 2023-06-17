@@ -30,7 +30,7 @@ jobs:
 
       - name: Install RcppCGAL
         run: |
-          Rscript -e "install.packages(c('RcppCGAL'), repos='https://cran.rstudio.com')"
+          Rscript -e "install.packages(c('RcppCGAL'), repos='https://ftp.belnet.be/mirror/CRAN')"
 
       - name: Download CGAL
         run: |
