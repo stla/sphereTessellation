@@ -22,5 +22,6 @@ LinkingTo:
 Suggests: 
     cooltools,
     uniformly
+SystemRequirements: C++ 17, gmp, mpfr
 Encoding: UTF-8
 RoxygenNote: 7.2.3
