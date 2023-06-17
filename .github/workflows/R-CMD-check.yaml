@@ -28,6 +28,14 @@ jobs:
         with:
           use-public-rspm: true
 
+      - name: Install RcppCGAL
+        run: |
+          Rscript -e "install.packages(c('RcppCGAL'), repos='https://cran.rstudio.com')"
+
+      - name: Download CGAL
+        run: |
+          Rscript -e "RcppCGAL::cgal_install()"
+
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           extra-packages: any::rcmdcheck
