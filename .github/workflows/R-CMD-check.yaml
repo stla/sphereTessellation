@@ -40,7 +40,7 @@ jobs:
 
       - name: Download CGAL
         run: |
-          Rscript -e "library(RcppCGAL); cgal_pkg_state <- list2env(list(ASK_INSTALL = FALSE, CLEANED = FALSE, OLD_VERSION = NA_character_, VERSION = NA_character_, WARNED = FALSE)); cgal_install('https://github.com/CGAL/cgal/releases', '5.5.2')"
+          Rscript -e "library(RcppCGAL); cgal_pkg_stage <- list2env(list(ASK_INSTALL = FALSE, CLEANED = FALSE, OLD_VERSION = NA_character_, VERSION = NA_character_, WARNED = FALSE)); cgal_install('https://github.com/CGAL/cgal/releases', '5.5.2')"
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
