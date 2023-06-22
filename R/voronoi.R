@@ -194,7 +194,7 @@ plotVoronoiOnSphere <- function(
       colors <- rep(colors, length(vor))
     }
   } else if(all(is.na(colors)) || is.null(colors)) {
-    colors <- rep(NA, length(vor))
+    colors <- rep("white", length(vor))
   } else if(!isStringVector(colors)) {
     stop("Invalid `colors` argument.")
   }
