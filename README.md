@@ -20,6 +20,8 @@ ___
 
 ![](https://raw.githubusercontent.com/stla/sphereTessellation/main/inst/gifs/voronoi_elliptical-gray-animated.gif)
 
+![](https://raw.githubusercontent.com/stla/sphereTessellation/main/inst/gifs/voronoi_capitals.gif)
+
 ![](https://raw.githubusercontent.com/stla/sphereTessellation/main/inst/gifs/delaunay_spherical-icosphere-klingon.gif)
 
 ![](https://raw.githubusercontent.com/stla/sphereTessellation/main/inst/gifs/delaunay_spherical-septuaginta01.gif)
