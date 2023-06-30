@@ -1,6 +1,6 @@
 Package: sphereTessellation
 Title: Delaunay and Voronoï Tessellations on the Sphere
-Version: 1.0.0.9000
+Version: 1.1.0
 Authors@R: 
     person("Stéphane", "Laurent", , "laurent_step@outlook.fr", role = c("aut", "cre"))
 Description: Performs Delaunay and Voronoï tessellations on spheres and
