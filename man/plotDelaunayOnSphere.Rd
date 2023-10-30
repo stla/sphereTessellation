@@ -11,8 +11,6 @@ plotDelaunayOnSphere(
   randomArgs = list(hue = "random", luminosity = "bright"),
   edges = FALSE,
   vertices = FALSE,
-  hue = "random",
-  luminosity = "bright",
   ecolor = "black",
   lwd = 3,
   vcolor = "black",
