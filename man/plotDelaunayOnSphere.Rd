@@ -7,6 +7,8 @@
 plotDelaunayOnSphere(
   del,
   colors = "random",
+  distinctArgs = list(seedcolors = c("#ff0000", "#00ff00", "#0000ff")),
+  randomArgs = list(hue = "random", luminosity = "bright"),
   edges = FALSE,
   vertices = FALSE,
   hue = "random",
@@ -23,16 +25,19 @@ plotDelaunayOnSphere(
 
 \item{colors}{controls the filling colors of the triangles, either
 \code{NA} for no color, or a single color, or \code{"random"} to get
-multiple colors with \code{\link[randomcoloR]{randomColor}}, or
+multiple colors with \code{\link[colorsGen]{randomColor}}, or
 \code{"distinct"} to get multiple colors with
-\code{\link[randomcoloR]{distinctColorPalette}}}
+\code{\link[Polychrome]{createPalette}}}
+
+\item{distinctArgs}{if \code{colors = "distinct"}, a list of arguments
+passed to \code{\link[Polychrome]{createPalette}}}
+
+\item{randomArgs}{if \code{colors = "random"}, a list of arguments passed
+to \code{\link[colorsGen]{randomColor}}}
 
 \item{edges}{Boolean, whether to plot the edges}
 
 \item{vertices}{Boolean, whether to plot the vertices}
-
-\item{hue, luminosity}{if \code{colors = "random"}, these arguments are
-passed to \code{\link[randomcoloR]{randomColor}}}
 
 \item{ecolor}{a color for the edges}
 

@@ -117,9 +117,13 @@ plotVoronoiEdges <- function(cell, radius, center, color, lwd) {
 #' @param vor an output of \code{\link{VoronoiOnSphere}}
 #' @param colors controls the filling colors of the triangles, either
 #'   \code{NA} for no color, or a single color, or \code{"random"} to get
-#'   multiple colors with \code{\link[randomcoloR]{randomColor}}, or
+#'   multiple colors with \code{\link[colorsGen]{randomColor}}, or
 #'   \code{"distinct"} to get multiple colors with
-#'   \code{\link[randomcoloR]{distinctColorPalette}}
+#'   \code{\link[Polychrome]{createPalette}}, or \code{"gradient"}
+#' @param distinctArgs if \code{colors = "distinct"}, a list of arguments
+#'   passed to \code{\link[Polychrome]{createPalette}}
+#' @param randomArgs if \code{colors = "random"}, a list of arguments passed
+#'   to \code{\link[colorsGen]{randomColor}}
 #' @param palette this argument is used only when \code{colors="gradient"}; it
 #'   can be either a character vector of colors, or the name of a palette
 #'   which will be passed to the \code{palette} argument of the function
@@ -143,7 +147,6 @@ plotVoronoiEdges <- function(cell, radius, center, color, lwd) {
 #'
 #' @importFrom rgl spheres3d
 #' @importFrom grDevices hcl.colors
-#' @importFrom randomcoloR randomColor distinctColorPalette
 #'
 #' @export
 #'
@@ -170,9 +173,11 @@ plotVoronoiEdges <- function(cell, radius, center, color, lwd) {
 #' next3d()
 #' plotVoronoiOnSphere(vor, palette = "Viridis", bias = 1.1)}
 plotVoronoiOnSphere <- function(
-    vor, colors = "gradient", palette = "Rocket", bias = 1,
+    vor, colors = "gradient",
+    distinctArgs = list(seedcolors = c("#ff0000", "#00ff00", "#0000ff")),
+    randomArgs = list(hue = "random", luminosity = "bright"),
+    palette = "Rocket", bias = 1,
     edges = FALSE, sites = FALSE,
-    hue = "random", luminosity = "bright",
     ecolor = "black", lwd = 3,
     scolor = "black", sradius = NA, ...
 ) {
@@ -187,9 +192,9 @@ plotVoronoiOnSphere <- function(
         palette <- hcl.colors(255L, palette = palette)
       }
     } else if(colors == "random") {
-      colors <- randomColor(length(vor), hue = hue, luminosity = luminosity)
+      colors <- rcolors(length(vor), randomArgs)
     } else if(colors == "distinct") {
-      colors <- distinctColorPalette(length(vor))
+      colors <- distinctColors(length(vor), distinctArgs)
     } else {
       colors <- rep(colors, length(vor))
     }

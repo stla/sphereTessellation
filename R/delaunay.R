@@ -99,13 +99,15 @@ plotDelaunayEdges <- function(vertices, radius, center, color, lwd) {
 #' @param del an output of \code{\link{DelaunayOnSphere}}
 #' @param colors controls the filling colors of the triangles, either
 #'   \code{NA} for no color, or a single color, or \code{"random"} to get
-#'   multiple colors with \code{\link[randomcoloR]{randomColor}}, or
+#'   multiple colors with \code{\link[colorsGen]{randomColor}}, or
 #'   \code{"distinct"} to get multiple colors with
-#'   \code{\link[randomcoloR]{distinctColorPalette}}
+#'   \code{\link[Polychrome]{createPalette}}
+#' @param distinctArgs if \code{colors = "distinct"}, a list of arguments
+#'   passed to \code{\link[Polychrome]{createPalette}}
+#' @param randomArgs if \code{colors = "random"}, a list of arguments passed
+#'   to \code{\link[colorsGen]{randomColor}}
 #' @param edges Boolean, whether to plot the edges
 #' @param vertices Boolean, whether to plot the vertices
-#' @param hue,luminosity if \code{colors = "random"}, these arguments are
-#'   passed to \code{\link[randomcoloR]{randomColor}}
 #' @param ecolor a color for the edges
 #' @param lwd line width for the edges, if they are plotted
 #' @param vcolor a color for the vertices
@@ -116,7 +118,6 @@ plotDelaunayEdges <- function(vertices, radius, center, color, lwd) {
 #'
 #' @return No value is returned.
 #' @export
-#' @importFrom randomcoloR randomColor distinctColorPalette
 #' @importFrom rgl spheres3d
 #'
 #' @examples
@@ -129,7 +130,10 @@ plotDelaunayEdges <- function(vertices, radius, center, color, lwd) {
 #' open3d(windowRect = 50 + c(0, 0, 512, 512), zoom = 0.8)
 #' plotDelaunayOnSphere(del)
 plotDelaunayOnSphere <- function(
-    del, colors = "random", edges = FALSE, vertices = FALSE,
+    del, colors = "random",
+    distinctArgs = list(seedcolors = c("#ff0000", "#00ff00", "#0000ff")),
+    randomArgs = list(hue = "random", luminosity = "bright"),
+    edges = FALSE, vertices = FALSE,
     hue = "random", luminosity = "bright", ecolor = "black", lwd = 3,
     vcolor = "black", vradius = NA, ...
 ) {
@@ -143,9 +147,9 @@ plotDelaunayOnSphere <- function(
   Faces      <- del[["faces"]][solidFaces, ]
   if(isString(colors)) {
     if(colors == "random") {
-      colors <- randomColor(length(Meshes), hue = hue, luminosity = luminosity)
+      colors <- rcolors(length(Meshes), randomArgs)
     } else if(colors == "distinct") {
-      colors <- distinctColorPalette(length(Meshes))
+      colors <- distinctColors(length(Meshes), distinctArgs)
     } else{
       colors <- rep(colors, length(Meshes))
     }

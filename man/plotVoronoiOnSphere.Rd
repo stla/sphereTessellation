@@ -7,12 +7,12 @@
 plotVoronoiOnSphere(
   vor,
   colors = "gradient",
+  distinctArgs = list(seedcolors = c("#ff0000", "#00ff00", "#0000ff")),
+  randomArgs = list(hue = "random", luminosity = "bright"),
   palette = "Rocket",
   bias = 1,
   edges = FALSE,
   sites = FALSE,
-  hue = "random",
-  luminosity = "bright",
   ecolor = "black",
   lwd = 3,
   scolor = "black",
@@ -25,9 +25,15 @@ plotVoronoiOnSphere(
 
 \item{colors}{controls the filling colors of the triangles, either
 \code{NA} for no color, or a single color, or \code{"random"} to get
-multiple colors with \code{\link[randomcoloR]{randomColor}}, or
+multiple colors with \code{\link[colorsGen]{randomColor}}, or
 \code{"distinct"} to get multiple colors with
-\code{\link[randomcoloR]{distinctColorPalette}}}
+\code{\link[Polychrome]{createPalette}}, or \code{"gradient"}}
+
+\item{distinctArgs}{if \code{colors = "distinct"}, a list of arguments
+passed to \code{\link[Polychrome]{createPalette}}}
+
+\item{randomArgs}{if \code{colors = "random"}, a list of arguments passed
+to \code{\link[colorsGen]{randomColor}}}
 
 \item{palette}{this argument is used only when \code{colors="gradient"}; it
 can be either a character vector of colors, or the name of a palette
@@ -42,9 +48,6 @@ is passed to the \code{bias} argument of the function
 
 \item{sites}{Boolean, whether to plot the Voronoï sites}
 
-\item{hue, luminosity}{if \code{colors = "random"}, these arguments are
-passed to \code{\link[randomcoloR]{randomColor}}}
-
 \item{ecolor}{a color for the edges}
 
 \item{lwd}{graphical parameter for the edges, if they are plotted}
@@ -56,6 +59,9 @@ they are plotted); \code{NA} for a default value}
 
 \item{...}{arguments passed to \code{\link[rgl]{shade3d}} to plot the
 spherical faces}
+
+\item{hue, luminosity}{if \code{colors = "random"}, these arguments are
+passed to \code{\link[randomcoloR]{randomColor}}}
 }
 \value{
 No value is returned.
