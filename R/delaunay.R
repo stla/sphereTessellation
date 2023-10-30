@@ -134,7 +134,7 @@ plotDelaunayOnSphere <- function(
     distinctArgs = list(seedcolors = c("#ff0000", "#00ff00", "#0000ff")),
     randomArgs = list(hue = "random", luminosity = "bright"),
     edges = FALSE, vertices = FALSE,
-    hue = "random", luminosity = "bright", ecolor = "black", lwd = 3,
+    ecolor = "black", lwd = 3,
     vcolor = "black", vradius = NA, ...
 ) {
   stopifnot(isBoolean(edges))
