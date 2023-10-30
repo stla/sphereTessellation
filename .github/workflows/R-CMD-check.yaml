@@ -34,14 +34,6 @@ jobs:
         with:
           use-public-rspm: true
 
-      - name: Install RcppCGAL
-        run: |
-          Rscript -e "install.packages(c('RcppCGAL'), repos='https://ftp.belnet.be/mirror/CRAN')"
-
-      - name: Download CGAL
-        run: |
-          Rscript -e "library(RcppCGAL); cgal_pkg_stage <- list2env(list(ASK_INSTALL = FALSE, CLEANED = FALSE, OLD_VERSION = NA_character_, VERSION = NA_character_, WARNED = FALSE)); cgal_install(version = '5.5.2')"
-
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           extra-packages: any::rcmdcheck
