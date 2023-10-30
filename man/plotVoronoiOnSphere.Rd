@@ -59,9 +59,6 @@ they are plotted); \code{NA} for a default value}
 
 \item{...}{arguments passed to \code{\link[rgl]{shade3d}} to plot the
 spherical faces}
-
-\item{hue, luminosity}{if \code{colors = "random"}, these arguments are
-passed to \code{\link[randomcoloR]{randomColor}}}
 }
 \value{
 No value is returned.

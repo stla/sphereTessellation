@@ -133,8 +133,6 @@ plotVoronoiEdges <- function(cell, radius, center, color, lwd) {
 #'   \code{\link[grDevices]{colorRamp}}
 #' @param edges Boolean, whether to plot the edges
 #' @param sites Boolean, whether to plot the Voronoï sites
-#' @param hue,luminosity if \code{colors = "random"}, these arguments are
-#'   passed to \code{\link[randomcoloR]{randomColor}}
 #' @param ecolor a color for the edges
 #' @param lwd graphical parameter for the edges, if they are plotted
 #' @param scolor a color for the sites
