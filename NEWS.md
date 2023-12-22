@@ -1,4 +1,4 @@
-# sphereTessellation 1.1.0.9000
+# sphereTessellation 1.2.0
 
 The package does no longer depend on the 'randomcoloR' package. Instead, it 
 now depends on the 'colorsGen' and 'Polychrome' packages.
